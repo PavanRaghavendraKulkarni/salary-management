@@ -2,6 +2,7 @@
 export const DISPLAY_LOCALE = 'en-US';
 
 export const APP_TITLE = 'ACME Salary Management';
+export const LOADING_LABEL = 'Loading';
 
 export const NAV_LABELS = {
   EMPLOYEES: 'Employees',

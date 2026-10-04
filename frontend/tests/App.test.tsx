@@ -40,10 +40,10 @@ describe('App', () => {
     expect(screen.getByRole('heading', { name: PAGE_TITLES.EMPLOYEES })).toBeInTheDocument();
   });
 
-  it('renders the insights page at the insights route', () => {
+  it('renders the insights page at the insights route', async () => {
     renderAt(ROUTES.INSIGHTS);
 
-    expect(screen.getByRole('heading', { name: PAGE_TITLES.INSIGHTS })).toBeInTheDocument();
+    expect(await screen.findByRole('heading', { name: PAGE_TITLES.INSIGHTS })).toBeInTheDocument();
   });
 
   it('redirects the root path to the employees page', () => {
