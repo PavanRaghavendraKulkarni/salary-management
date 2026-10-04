@@ -2,7 +2,10 @@ from datetime import date
 from decimal import Decimal
 from typing import Any
 
+from sqlalchemy.orm import Session
+
 from app.constants.employee_constants import Country, Currency, Department, JobTitle
+from app.models.employee_model import Employee
 from app.views.employee_view import EmployeeCreate, EmployeeUpdate
 
 DEFAULT_EMPLOYEE_FIELDS: dict[str, Any] = {
@@ -40,3 +43,23 @@ def build_employee_record(**overrides: Any) -> dict[str, Any]:
         "annual_salary": Decimal(str(fields["annual_salary"])),
         "hire_date": date.fromisoformat(str(fields["hire_date"])),
     }
+
+
+def insert_employees(session: Session, records: list[dict[str, Any]]) -> list[Employee]:
+    """Insert hand-built rows directly, bypassing the API, to arrange test data quickly."""
+    employees = [Employee(**record) for record in records]
+    session.add_all(employees)
+    session.commit()
+    return employees
+
+
+def build_numbered_records(count: int, **overrides: Any) -> list[dict[str, Any]]:
+    """Distinct, predictable rows: 'Employee 01', 'employee01@acme.com', and so on."""
+    return [
+        build_employee_record(
+            full_name=f"Employee {number:02d}",
+            email=f"employee{number:02d}@acme.com",
+            **overrides,
+        )
+        for number in range(1, count + 1)
+    ]
