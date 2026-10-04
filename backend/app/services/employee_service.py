@@ -14,7 +14,12 @@ from app.exceptions.domain_exceptions import (
 )
 from app.models.employee_model import Employee
 from app.repositories.employee_repository import EmployeeRepository
-from app.views.employee_view import EmployeeCreate, EmployeeFields, EmployeeResponse
+from app.views.employee_view import (
+    EmployeeCreate,
+    EmployeeFields,
+    EmployeeResponse,
+    EmployeeUpdate,
+)
 
 
 class EmployeeService:
@@ -36,6 +41,16 @@ class EmployeeService:
 
     def get_employee(self, employee_id: int) -> EmployeeResponse:
         return self._to_response(self._find_employee_or_raise(employee_id))
+
+    def update_employee(self, employee_id: int, payload: EmployeeUpdate) -> EmployeeResponse:
+        """Apply the same rules as create; the employee's own email does not count as taken."""
+        employee = self._find_employee_or_raise(employee_id)
+        values = self._validated_values(payload)
+        self._ensure_email_is_available(values["email"], excluding_employee_id=employee_id)
+        return self._to_response(self._repository.update(employee, values))
+
+    def delete_employee(self, employee_id: int) -> None:
+        self._repository.delete(self._find_employee_or_raise(employee_id))
 
     def _find_employee_or_raise(self, employee_id: int) -> Employee:
         employee = self._repository.get_by_id(employee_id)
@@ -62,8 +77,11 @@ class EmployeeService:
         if hire_date > self._today_provider():
             raise DomainValidationError(FUTURE_HIRE_DATE_MESSAGE)
 
-    def _ensure_email_is_available(self, email: str) -> None:
-        if self._repository.get_by_email(email) is not None:
+    def _ensure_email_is_available(
+        self, email: str, excluding_employee_id: int | None = None
+    ) -> None:
+        owner = self._repository.get_by_email(email)
+        if owner is not None and owner.id != excluding_employee_id:
             raise DuplicateEmailError(email)
 
     @staticmethod

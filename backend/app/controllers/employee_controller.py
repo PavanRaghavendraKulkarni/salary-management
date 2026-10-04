@@ -1,11 +1,11 @@
 from typing import Annotated
 
-from fastapi import APIRouter, Depends, status
+from fastapi import APIRouter, Depends, Response, status
 
 from app.constants.api_constants import EMPLOYEE_ID_PATH, EMPLOYEES_PATH, EMPLOYEES_TAG
 from app.dependencies.providers import get_employee_service
 from app.services.employee_service import EmployeeService
-from app.views.employee_view import EmployeeCreate, EmployeeResponse
+from app.views.employee_view import EmployeeCreate, EmployeeResponse, EmployeeUpdate
 from app.views.error_view import ErrorResponse
 
 router = APIRouter(prefix=EMPLOYEES_PATH, tags=[EMPLOYEES_TAG])
@@ -26,3 +26,26 @@ def create_employee(
 @router.get(EMPLOYEE_ID_PATH, responses={status.HTTP_404_NOT_FOUND: {"model": ErrorResponse}})
 def get_employee(employee_id: int, service: EmployeeServiceDependency) -> EmployeeResponse:
     return service.get_employee(employee_id)
+
+
+@router.put(
+    EMPLOYEE_ID_PATH,
+    responses={
+        status.HTTP_404_NOT_FOUND: {"model": ErrorResponse},
+        status.HTTP_409_CONFLICT: {"model": ErrorResponse},
+    },
+)
+def update_employee(
+    employee_id: int, payload: EmployeeUpdate, service: EmployeeServiceDependency
+) -> EmployeeResponse:
+    return service.update_employee(employee_id, payload)
+
+
+@router.delete(
+    EMPLOYEE_ID_PATH,
+    status_code=status.HTTP_204_NO_CONTENT,
+    responses={status.HTTP_404_NOT_FOUND: {"model": ErrorResponse}},
+)
+def delete_employee(employee_id: int, service: EmployeeServiceDependency) -> Response:
+    service.delete_employee(employee_id)
+    return Response(status_code=status.HTTP_204_NO_CONTENT)

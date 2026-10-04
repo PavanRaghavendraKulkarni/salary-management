@@ -25,3 +25,14 @@ class EmployeeRepository:
 
     def get_by_email(self, email: str) -> Employee | None:
         return self._session.scalars(select(Employee).where(Employee.email == email)).first()
+
+    def update(self, employee: Employee, values: Mapping[str, Any]) -> Employee:
+        for field, value in values.items():
+            setattr(employee, field, value)
+        self._session.commit()
+        self._session.refresh(employee)
+        return employee
+
+    def delete(self, employee: Employee) -> None:
+        self._session.delete(employee)
+        self._session.commit()
