@@ -35,7 +35,7 @@ def test_country_insights_are_ordered_by_country_name(
     assert countries == sorted(countries)
 
 
-def test_average_of_one_third_cent_values_rounds_half_up(
+def test_average_with_fractional_cents_rounds_to_the_nearest_cent(
     service: InsightService, session: Session
 ) -> None:
     insert_employees(

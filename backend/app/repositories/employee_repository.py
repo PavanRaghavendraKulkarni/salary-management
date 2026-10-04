@@ -1,10 +1,22 @@
 from collections.abc import Mapping, Sequence
+from dataclasses import dataclass
+from decimal import Decimal
 from typing import Any
 
-from sqlalchemy import ColumnElement, Select, delete, func, insert, or_, select
+from sqlalchemy import (
+    ColumnElement,
+    Numeric,
+    Select,
+    delete,
+    func,
+    insert,
+    or_,
+    select,
+    type_coerce,
+)
 from sqlalchemy.orm import InstrumentedAttribute, Session
 
-from app.constants.employee_constants import EmployeeSortField
+from app.constants.employee_constants import SALARY_PRECISION, SALARY_SCALE, EmployeeSortField
 from app.constants.pagination_constants import SortOrder
 from app.models.employee_model import Employee
 
@@ -17,6 +29,18 @@ SORTABLE_COLUMNS: dict[EmployeeSortField, InstrumentedAttribute[Any]] = {
     EmployeeSortField.ANNUAL_SALARY: Employee.annual_salary,
     EmployeeSortField.HIRE_DATE: Employee.hire_date,
 }
+
+
+@dataclass(frozen=True)
+class SalaryAggregate:
+    """Salary statistics for one group (a country, job title or department)."""
+
+    group: str
+    currency: str
+    headcount: int
+    min_salary: Decimal
+    max_salary: Decimal
+    average_salary: Decimal
 
 
 class EmployeeRepository:
@@ -119,3 +143,35 @@ class EmployeeRepository:
     def delete_all(self) -> None:
         self._session.execute(delete(Employee))
         self._session.commit()
+
+    def salary_stats_by_country(self) -> list[SalaryAggregate]:
+        """Aggregate in SQL with GROUP BY so 10,000 rows never reach Python."""
+        return self._grouped_salary_stats(Employee.country)
+
+    def salary_stats_by_job_title(self, country: str) -> list[SalaryAggregate]:
+        return self._grouped_salary_stats(Employee.job_title, Employee.country == country)
+
+    def salary_stats_by_department(self, country: str) -> list[SalaryAggregate]:
+        return self._grouped_salary_stats(Employee.department, Employee.country == country)
+
+    def _grouped_salary_stats(
+        self, group_column: InstrumentedAttribute[str], *conditions: ColumnElement[bool]
+    ) -> list[SalaryAggregate]:
+        average = type_coerce(
+            func.round(func.avg(Employee.annual_salary), SALARY_SCALE),
+            Numeric(SALARY_PRECISION, SALARY_SCALE),
+        )
+        statement = (
+            select(
+                group_column,
+                Employee.currency,
+                func.count(Employee.id),
+                func.min(Employee.annual_salary),
+                func.max(Employee.annual_salary),
+                average,
+            )
+            .where(*conditions)
+            .group_by(group_column, Employee.currency)
+            .order_by(group_column)
+        )
+        return [SalaryAggregate(*row) for row in self._session.execute(statement).all()]
