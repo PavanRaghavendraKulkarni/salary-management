@@ -63,3 +63,43 @@ def build_numbered_records(count: int, **overrides: Any) -> list[dict[str, Any]]
         )
         for number in range(1, count + 1)
     ]
+
+
+def build_insight_dataset() -> list[dict[str, Any]]:
+    """Five employees whose statistics are easy to compute by hand.
+
+    India: 1,000,000 and 1,500,000 (Software Engineer, Engineering) and 700,000 (Sales
+    Representative, Sales); average 1,066,666.666... which must round to 1,066,666.67.
+    Germany: 60,000.00 (Software Engineer, Engineering) and 50,000.20 (Accountant, Finance).
+    """
+    india = {"country": Country.INDIA.value, "currency": Currency.INR.value}
+    germany = {"country": Country.GERMANY.value, "currency": Currency.EUR.value}
+    engineer = {
+        "job_title": JobTitle.SOFTWARE_ENGINEER.value,
+        "department": Department.ENGINEERING.value,
+    }
+    return [
+        build_employee_record(
+            email="in1@acme.com", annual_salary="1000000.00", **india, **engineer
+        ),
+        build_employee_record(
+            email="in2@acme.com", annual_salary="1500000.00", **india, **engineer
+        ),
+        build_employee_record(
+            email="in3@acme.com",
+            annual_salary="700000.00",
+            job_title=JobTitle.SALES_REPRESENTATIVE.value,
+            department=Department.SALES.value,
+            **india,
+        ),
+        build_employee_record(
+            email="de1@acme.com", annual_salary="60000.00", **germany, **engineer
+        ),
+        build_employee_record(
+            email="de2@acme.com",
+            annual_salary="50000.20",
+            job_title=JobTitle.ACCOUNTANT.value,
+            department=Department.FINANCE.value,
+            **germany,
+        ),
+    ]
