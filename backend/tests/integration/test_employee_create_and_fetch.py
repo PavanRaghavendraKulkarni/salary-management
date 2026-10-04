@@ -40,7 +40,7 @@ def test_create_employee_rejects_duplicate_email(client: TestClient) -> None:
 def test_create_employee_rejects_salary_of_zero_or_below(client: TestClient, salary: str) -> None:
     response = client.post(EMPLOYEES_URL, json=build_employee_payload(annual_salary=salary))
 
-    assert response.status_code == status.HTTP_422_UNPROCESSABLE_ENTITY
+    assert response.status_code == status.HTTP_422_UNPROCESSABLE_CONTENT
     assert response.json()["error"]["code"] == ErrorCode.VALIDATION_ERROR
 
 
@@ -51,7 +51,7 @@ def test_create_employee_rejects_currency_that_does_not_match_country(
 
     response = client.post(EMPLOYEES_URL, json=payload)
 
-    assert response.status_code == status.HTTP_422_UNPROCESSABLE_ENTITY
+    assert response.status_code == status.HTTP_422_UNPROCESSABLE_CONTENT
     assert response.json()["error"]["code"] == ErrorCode.VALIDATION_ERROR
 
 
@@ -60,7 +60,7 @@ def test_create_employee_rejects_hire_date_in_the_future(client: TestClient) -> 
 
     response = client.post(EMPLOYEES_URL, json=build_employee_payload(hire_date=tomorrow))
 
-    assert response.status_code == status.HTTP_422_UNPROCESSABLE_ENTITY
+    assert response.status_code == status.HTTP_422_UNPROCESSABLE_CONTENT
     assert response.json()["error"]["code"] == ErrorCode.VALIDATION_ERROR
 
 
@@ -80,7 +80,7 @@ def test_create_employee_rejects_invalid_fields(
 ) -> None:
     response = client.post(EMPLOYEES_URL, json=build_employee_payload(**overrides))
 
-    assert response.status_code == status.HTTP_422_UNPROCESSABLE_ENTITY
+    assert response.status_code == status.HTTP_422_UNPROCESSABLE_CONTENT
     error = response.json()["error"]
     assert error["code"] == ErrorCode.VALIDATION_ERROR
     assert error["message"]
