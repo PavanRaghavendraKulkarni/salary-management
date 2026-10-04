@@ -1,7 +1,7 @@
-from collections.abc import Mapping
+from collections.abc import Mapping, Sequence
 from typing import Any
 
-from sqlalchemy import ColumnElement, Select, func, or_, select
+from sqlalchemy import ColumnElement, Select, delete, func, insert, or_, select
 from sqlalchemy.orm import InstrumentedAttribute, Session
 
 from app.constants.employee_constants import EmployeeSortField
@@ -107,3 +107,15 @@ class EmployeeRepository:
         column = SORTABLE_COLUMNS[sort_by]
         primary = column.desc() if sort_order == SortOrder.DESC else column.asc()
         return statement.order_by(primary, Employee.id.asc())
+
+    def count_all(self) -> int:
+        return self._session.scalar(select(func.count(Employee.id))) or 0
+
+    def bulk_create(self, rows: Sequence[Mapping[str, Any]]) -> None:
+        """One multi-row INSERT per call; far faster than adding ORM objects one by one."""
+        self._session.execute(insert(Employee), list(rows))
+        self._session.commit()
+
+    def delete_all(self) -> None:
+        self._session.execute(delete(Employee))
+        self._session.commit()
