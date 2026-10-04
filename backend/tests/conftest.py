@@ -8,6 +8,7 @@ from sqlalchemy.engine import Engine
 from sqlalchemy.orm import Session, sessionmaker
 from sqlalchemy.pool import StaticPool
 
+from app.config.settings import Settings
 from app.dependencies.providers import get_session
 from app.main import create_app
 from app.models.base_model import Base
@@ -36,7 +37,7 @@ def session(engine: Engine) -> Iterator[Session]:
 
 @pytest.fixture
 def app(session: Session) -> FastAPI:
-    application = create_app()
+    application = create_app(Settings(frontend_dist_dir=None))
     application.dependency_overrides[get_session] = lambda: session
     return application
 

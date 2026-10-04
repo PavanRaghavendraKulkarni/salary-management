@@ -15,6 +15,9 @@ INSIGHTS_COUNTRIES_PATH = "/countries"
 INSIGHTS_JOB_TITLES_PATH = "/job-titles"
 INSIGHTS_DEPARTMENTS_PATH = "/departments"
 
+FRONTEND_ROUTE_PATH = "/{requested_path:path}"
+FRONTEND_INDEX_FILE = "index.html"
+
 HEALTH_TAG = "health"
 EMPLOYEES_TAG = "employees"
 META_TAG = "meta"

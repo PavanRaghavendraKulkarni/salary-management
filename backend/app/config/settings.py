@@ -1,6 +1,10 @@
 from functools import lru_cache
+from pathlib import Path
 
 from pydantic_settings import BaseSettings, SettingsConfigDict
+
+BACKEND_DIR = Path(__file__).resolve().parents[2]
+DEFAULT_FRONTEND_DIST_DIR = BACKEND_DIR.parent / "frontend" / "dist"
 
 
 class Settings(BaseSettings):
@@ -11,6 +15,7 @@ class Settings(BaseSettings):
     environment: str = "development"
     database_url: str = "sqlite:///./salary_management.db"
     cors_origins: list[str] = ["http://localhost:5173"]
+    frontend_dist_dir: Path | None = DEFAULT_FRONTEND_DIST_DIR
 
 
 @lru_cache

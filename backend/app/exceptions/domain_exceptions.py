@@ -1,6 +1,7 @@
 from app.constants.message_constants import (
     DUPLICATE_EMAIL_MESSAGE,
     EMPLOYEE_NOT_FOUND_MESSAGE,
+    ROUTE_NOT_FOUND_MESSAGE,
     ErrorCode,
 )
 
@@ -20,6 +21,13 @@ class EmployeeNotFoundError(DomainError):
 
     def __init__(self, employee_id: int) -> None:
         super().__init__(EMPLOYEE_NOT_FOUND_MESSAGE.format(employee_id=employee_id))
+
+
+class RouteNotFoundError(DomainError):
+    code = ErrorCode.NOT_FOUND
+
+    def __init__(self, path: str) -> None:
+        super().__init__(ROUTE_NOT_FOUND_MESSAGE.format(path=path))
 
 
 class DuplicateEmailError(DomainError):
