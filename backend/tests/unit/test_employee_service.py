@@ -11,7 +11,7 @@ from app.exceptions.domain_exceptions import (
 )
 from app.repositories.employee_repository import EmployeeRepository
 from app.services.employee_service import EmployeeService
-from tests.factories import build_employee_create
+from tests.factories import build_employee_create, build_employee_update
 
 FIXED_TODAY = date(2026, 1, 15)
 UNKNOWN_EMPLOYEE_ID = 999
@@ -77,3 +77,63 @@ def test_get_employee_returns_existing_employee(service: EmployeeService) -> Non
 def test_get_employee_raises_not_found_for_unknown_id(service: EmployeeService) -> None:
     with pytest.raises(EmployeeNotFoundError):
         service.get_employee(UNKNOWN_EMPLOYEE_ID)
+
+
+def test_update_employee_replaces_editable_fields(service: EmployeeService) -> None:
+    created = service.create_employee(build_employee_create())
+
+    updated = service.update_employee(
+        created.id,
+        build_employee_update(full_name="Asha Rao-Menon", annual_salary="1750000.00"),
+    )
+
+    assert updated.full_name == "Asha Rao-Menon"
+    assert str(updated.annual_salary) == "1750000.00"
+    assert updated.created_at == created.created_at
+    assert updated.updated_at > created.updated_at
+
+
+def test_update_employee_allows_keeping_the_same_email(service: EmployeeService) -> None:
+    created = service.create_employee(build_employee_create())
+
+    updated = service.update_employee(created.id, build_employee_update(email=created.email))
+
+    assert updated.email == created.email
+
+
+def test_update_employee_rejects_email_used_by_another_employee(
+    service: EmployeeService,
+) -> None:
+    service.create_employee(build_employee_create(email="first@acme.com"))
+    second = service.create_employee(build_employee_create(email="second@acme.com"))
+
+    with pytest.raises(DuplicateEmailError):
+        service.update_employee(second.id, build_employee_update(email="FIRST@acme.com"))
+
+
+def test_update_employee_applies_the_same_validation_as_create(
+    service: EmployeeService,
+) -> None:
+    created = service.create_employee(build_employee_create())
+
+    with pytest.raises(DomainValidationError):
+        service.update_employee(created.id, build_employee_update(currency=Currency.EUR.value))
+
+
+def test_update_employee_raises_not_found_for_unknown_id(service: EmployeeService) -> None:
+    with pytest.raises(EmployeeNotFoundError):
+        service.update_employee(UNKNOWN_EMPLOYEE_ID, build_employee_update())
+
+
+def test_delete_employee_removes_the_employee(service: EmployeeService) -> None:
+    created = service.create_employee(build_employee_create())
+
+    service.delete_employee(created.id)
+
+    with pytest.raises(EmployeeNotFoundError):
+        service.get_employee(created.id)
+
+
+def test_delete_employee_raises_not_found_for_unknown_id(service: EmployeeService) -> None:
+    with pytest.raises(EmployeeNotFoundError):
+        service.delete_employee(UNKNOWN_EMPLOYEE_ID)

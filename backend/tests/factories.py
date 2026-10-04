@@ -3,7 +3,7 @@ from decimal import Decimal
 from typing import Any
 
 from app.constants.employee_constants import Country, Currency, Department, JobTitle
-from app.views.employee_view import EmployeeCreate
+from app.views.employee_view import EmployeeCreate, EmployeeUpdate
 
 DEFAULT_EMPLOYEE_FIELDS: dict[str, Any] = {
     "full_name": "Asha Rao",
@@ -25,6 +25,11 @@ def build_employee_payload(**overrides: Any) -> dict[str, Any]:
 def build_employee_create(**overrides: Any) -> EmployeeCreate:
     """Validated create schema for calling the service directly."""
     return EmployeeCreate.model_validate(build_employee_payload(**overrides))
+
+
+def build_employee_update(**overrides: Any) -> EmployeeUpdate:
+    """Validated update schema for calling the service directly."""
+    return EmployeeUpdate.model_validate(build_employee_payload(**overrides))
 
 
 def build_employee_record(**overrides: Any) -> dict[str, Any]:
