@@ -21,3 +21,10 @@ export const EMPLOYEE_VALIDATION = {
 } as const;
 
 export const SEARCH_DEBOUNCE_MS = 300;
+
+export const EMPLOYEE_FORM_MODES = {
+  CREATE: 'create',
+  EDIT: 'edit',
+} as const;
+
+export type EmployeeFormMode = (typeof EMPLOYEE_FORM_MODES)[keyof typeof EMPLOYEE_FORM_MODES];
