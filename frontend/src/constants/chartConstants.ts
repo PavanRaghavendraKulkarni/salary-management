@@ -3,6 +3,7 @@ export const CHART_SERIES_COLOR = '#2a78d6';
 export const CHART_GRID_COLOR = '#e6e5e0';
 export const CHART_AXIS_TEXT_COLOR = '#52514e';
 
+export const CHART_FONT_SIZE = 12;
 export const CHART_BAR_THICKNESS = 20;
 export const CHART_BAR_RADIUS: [number, number, number, number] = [0, 4, 4, 0];
 export const CHART_ROW_HEIGHT = 36;

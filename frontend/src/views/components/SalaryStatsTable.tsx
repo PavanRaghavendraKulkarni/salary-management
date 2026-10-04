@@ -16,6 +16,13 @@ export interface SalaryStatsRow extends SalaryStatistics {
   currency: string;
 }
 
+const STATISTIC_HEADERS = [
+  INSIGHT_LABELS.HEADCOUNT,
+  INSIGHT_LABELS.MINIMUM,
+  INSIGHT_LABELS.AVERAGE,
+  INSIGHT_LABELS.MAXIMUM,
+];
+
 interface SalaryStatsTableProps {
   title: string;
   groupLabel: string;
@@ -33,7 +40,8 @@ export default function SalaryStatsTable({
   selectedLabel,
   onSelect,
 }: SalaryStatsTableProps) {
-  const columnCount = showCurrency ? 6 : 5;
+  const groupColumns = showCurrency ? [groupLabel, INSIGHT_LABELS.CURRENCY] : [groupLabel];
+  const columnCount = groupColumns.length + STATISTIC_HEADERS.length;
 
   return (
     <Paper variant="outlined">
@@ -44,12 +52,14 @@ export default function SalaryStatsTable({
         <Table size="small" aria-label={title}>
           <TableHead>
             <TableRow>
-              <TableCell>{groupLabel}</TableCell>
-              {showCurrency && <TableCell>{INSIGHT_LABELS.CURRENCY}</TableCell>}
-              <TableCell align="right">{INSIGHT_LABELS.HEADCOUNT}</TableCell>
-              <TableCell align="right">{INSIGHT_LABELS.MINIMUM}</TableCell>
-              <TableCell align="right">{INSIGHT_LABELS.AVERAGE}</TableCell>
-              <TableCell align="right">{INSIGHT_LABELS.MAXIMUM}</TableCell>
+              {groupColumns.map((label) => (
+                <TableCell key={label}>{label}</TableCell>
+              ))}
+              {STATISTIC_HEADERS.map((label) => (
+                <TableCell key={label} align="right">
+                  {label}
+                </TableCell>
+              ))}
             </TableRow>
           </TableHead>
           <TableBody>

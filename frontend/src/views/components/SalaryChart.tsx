@@ -17,6 +17,7 @@ import {
   CHART_BAR_RADIUS,
   CHART_BAR_THICKNESS,
   CHART_CATEGORY_AXIS_WIDTH,
+  CHART_FONT_SIZE,
   CHART_GRID_COLOR,
   CHART_MARGIN,
   CHART_ROW_HEIGHT,
@@ -37,7 +38,7 @@ interface ChartDatum extends GroupInsight {
   average: number;
 }
 
-const AXIS_TICK = { fill: CHART_AXIS_TEXT_COLOR, fontSize: 12 };
+const AXIS_TICK = { fill: CHART_AXIS_TEXT_COLOR, fontSize: CHART_FONT_SIZE };
 
 function SalaryTooltip({
   active,
@@ -108,7 +109,7 @@ export default function SalaryChart({ title, currency, groups }: SalaryChartProp
               dataKey="average"
               position="right"
               fill={CHART_AXIS_TEXT_COLOR}
-              fontSize={12}
+              fontSize={CHART_FONT_SIZE}
               formatter={(value: number) => formatCompactCurrency(value, currency)}
             />
           </Bar>

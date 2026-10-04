@@ -11,7 +11,11 @@ import TableRow from '@mui/material/TableRow';
 import TableSortLabel from '@mui/material/TableSortLabel';
 import type { ChangeEvent } from 'react';
 
-import { EMPLOYEE_TABLE_COLUMNS, type EmployeeSortField } from '../../constants/employeeConstants';
+import {
+  EMPLOYEE_SORT_FIELDS,
+  EMPLOYEE_TABLE_COLUMNS,
+  type EmployeeSortField,
+} from '../../constants/employeeConstants';
 import { ACTION_LABELS, FIELD_LABELS, TABLE_LABELS } from '../../constants/messageConstants';
 import { PAGE_SIZE_OPTIONS, type SortOrder } from '../../constants/paginationConstants';
 import type { Employee } from '../../models/employee';
@@ -34,7 +38,7 @@ interface EmployeeTableProps {
 }
 
 function cellValue(employee: Employee, field: EmployeeSortField): string {
-  return field === 'annual_salary'
+  return field === EMPLOYEE_SORT_FIELDS.ANNUAL_SALARY
     ? formatCurrency(employee.annual_salary, employee.currency)
     : employee[field];
 }
