@@ -56,6 +56,6 @@ describe('EmployeesPage', () => {
 
     fireEvent.click(screen.getByRole('button', { name: ACTION_LABELS.ADD }));
 
-    expect(await screen.findByText(DIALOG_TITLES.CREATE)).toBeInTheDocument();
+    expect(await screen.findByRole('dialog', { name: DIALOG_TITLES.CREATE })).toBeInTheDocument();
   });
 });

@@ -3,7 +3,8 @@ import { afterEach, beforeEach, describe, expect, it, vi } from 'vitest';
 
 import { EMPLOYEE_FORM_MODES } from '../../src/constants/employeeConstants';
 import { SUCCESS_MESSAGES, VALIDATION_MESSAGES } from '../../src/constants/messageConstants';
-import { useEmployeeForm, validateEmployeeForm } from '../../src/controllers/useEmployeeForm';
+import { validateEmployeeForm } from '../../src/controllers/employeeFormValidation';
+import { useEmployeeForm } from '../../src/controllers/useEmployeeForm';
 import type { EmployeeInput } from '../../src/models/employee';
 import { ApiError } from '../../src/services/apiClient';
 import { employeeService } from '../../src/services/employeeService';

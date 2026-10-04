@@ -28,3 +28,18 @@ export const EMPLOYEE_FORM_MODES = {
 } as const;
 
 export type EmployeeFormMode = (typeof EMPLOYEE_FORM_MODES)[keyof typeof EMPLOYEE_FORM_MODES];
+
+export interface EmployeeTableColumn {
+  field: EmployeeSortField;
+  align: 'left' | 'right';
+}
+
+export const EMPLOYEE_TABLE_COLUMNS: readonly EmployeeTableColumn[] = [
+  { field: EMPLOYEE_SORT_FIELDS.FULL_NAME, align: 'left' },
+  { field: EMPLOYEE_SORT_FIELDS.EMAIL, align: 'left' },
+  { field: EMPLOYEE_SORT_FIELDS.JOB_TITLE, align: 'left' },
+  { field: EMPLOYEE_SORT_FIELDS.DEPARTMENT, align: 'left' },
+  { field: EMPLOYEE_SORT_FIELDS.COUNTRY, align: 'left' },
+  { field: EMPLOYEE_SORT_FIELDS.ANNUAL_SALARY, align: 'right' },
+  { field: EMPLOYEE_SORT_FIELDS.HIRE_DATE, align: 'left' },
+];

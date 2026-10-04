@@ -21,6 +21,8 @@ export const ERROR_MESSAGES = {
   DELETE_EMPLOYEE: 'Could not delete the employee.',
 } as const;
 
+export const NOTIFICATION_DURATION_MS = 4000;
+
 export const SUCCESS_MESSAGES = {
   EMPLOYEE_CREATED: 'Employee added.',
   EMPLOYEE_UPDATED: 'Employee updated.',
@@ -36,3 +38,45 @@ export const VALIDATION_MESSAGES = {
   SALARY_TOO_HIGH: 'Salary is too large.',
   HIRE_DATE_FUTURE: 'Hire date cannot be in the future.',
 } as const;
+
+export const FIELD_LABELS = {
+  full_name: 'Full name',
+  email: 'Email',
+  job_title: 'Job title',
+  department: 'Department',
+  country: 'Country',
+  currency: 'Currency',
+  annual_salary: 'Annual salary',
+  hire_date: 'Hire date',
+} as const;
+
+export const ACTION_LABELS = {
+  ADD: 'Add employee',
+  EDIT: 'Edit',
+  DELETE: 'Delete',
+  SAVE: 'Save',
+  CANCEL: 'Cancel',
+  CONFIRM_DELETE: 'Delete employee',
+  CLEAR_FILTERS: 'Clear filters',
+} as const;
+
+export const TABLE_LABELS = {
+  ACTIONS: 'Actions',
+  EMPTY: 'No employees match your search.',
+  ROWS_PER_PAGE: 'Rows per page',
+} as const;
+
+export const FILTER_LABELS = {
+  SEARCH: 'Search name or email',
+  ALL: 'All',
+} as const;
+
+export const DIALOG_TITLES = {
+  CREATE: 'Add employee',
+  EDIT: 'Edit employee',
+  CONFIRM_DELETE: 'Delete employee?',
+} as const;
+
+export function deleteConfirmationMessage(fullName: string): string {
+  return `${fullName} will be removed permanently. This cannot be undone.`;
+}
