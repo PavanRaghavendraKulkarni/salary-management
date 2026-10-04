@@ -4,6 +4,7 @@ import { createRoot } from 'react-dom/client';
 import { BrowserRouter } from 'react-router-dom';
 
 import App from './App';
+import { ROUTER_FUTURE_FLAGS } from './constants/routeConstants';
 
 const rootElement = document.getElementById('root');
 if (!rootElement) {
@@ -12,7 +13,7 @@ if (!rootElement) {
 
 createRoot(rootElement).render(
   <StrictMode>
-    <BrowserRouter>
+    <BrowserRouter future={ROUTER_FUTURE_FLAGS}>
       <CssBaseline />
       <App />
     </BrowserRouter>

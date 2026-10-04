@@ -6,3 +6,13 @@ export function formatCurrency(amount: string | number, currency: string): strin
     Number(amount),
   );
 }
+
+/** Short form for chart labels and axes, for example "$1.2M". */
+export function formatCompactCurrency(amount: string | number, currency: string): string {
+  return new Intl.NumberFormat(DISPLAY_LOCALE, {
+    style: 'currency',
+    currency,
+    notation: 'compact',
+    maximumFractionDigits: 1,
+  }).format(Number(amount));
+}

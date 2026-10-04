@@ -80,3 +80,27 @@ export const DIALOG_TITLES = {
 export function deleteConfirmationMessage(fullName: string): string {
   return `${fullName} will be removed permanently. This cannot be undone.`;
 }
+
+export const INSIGHT_LABELS = {
+  INTRO:
+    'Salaries are annual base pay in each country’s local currency, so figures are only compared within a country.',
+  COUNTRY_SUMMARY: 'Pay by country',
+  COUNTRY_SUMMARY_HINT: 'Select a country to see its breakdown.',
+  COUNTRY_SELECT: 'Country',
+  BY_JOB_TITLE: 'By job title',
+  BY_DEPARTMENT: 'By department',
+  COUNTRY: 'Country',
+  JOB_TITLE: 'Job title',
+  DEPARTMENT: 'Department',
+  CURRENCY: 'Currency',
+  HEADCOUNT: 'Headcount',
+  MINIMUM: 'Minimum',
+  AVERAGE: 'Average',
+  MAXIMUM: 'Maximum',
+  EMPTY: 'No salary data yet.',
+  CHART_RANGE: 'Range',
+} as const;
+
+export function averageSalaryChartTitle(country: string, currency: string): string {
+  return `Average salary by job title in ${country} (${currency})`;
+}

@@ -1,14 +1,26 @@
 import { render, screen } from '@testing-library/react';
 import { MemoryRouter } from 'react-router-dom';
-import { describe, expect, it } from 'vitest';
+import { describe, expect, it, vi } from 'vitest';
 
 import App from '../src/App';
-import { PAGE_TITLES, NAV_LABELS } from '../src/constants/messageConstants';
-import { ROUTES } from '../src/constants/routeConstants';
+import { NAV_LABELS, PAGE_TITLES } from '../src/constants/messageConstants';
+import { ROUTER_FUTURE_FLAGS, ROUTES } from '../src/constants/routeConstants';
+
+vi.mock('../src/services/employeeService', () => ({
+  employeeService: {
+    list: vi.fn().mockResolvedValue({ items: [], total: 0, page: 1, page_size: 20 }),
+    getFilterOptions: vi.fn().mockResolvedValue({ countries: [], departments: [], job_titles: [] }),
+    getReferenceData: vi.fn().mockResolvedValue({ countries: [], departments: [], job_titles: [] }),
+  },
+}));
+
+vi.mock('../src/services/insightService', () => ({
+  insightService: { getCountryInsights: vi.fn().mockResolvedValue([]) },
+}));
 
 function renderAt(path: string) {
   return render(
-    <MemoryRouter initialEntries={[path]}>
+    <MemoryRouter initialEntries={[path]} future={ROUTER_FUTURE_FLAGS}>
       <App />
     </MemoryRouter>,
   );
