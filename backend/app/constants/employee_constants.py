@@ -74,3 +74,17 @@ class JobTitle(StrEnum):
     HR_SPECIALIST = "HR Specialist"
     OPERATIONS_MANAGER = "Operations Manager"
     SUPPORT_SPECIALIST = "Support Specialist"
+
+
+class EmployeeSortField(StrEnum):
+    FULL_NAME = "full_name"
+    EMAIL = "email"
+    JOB_TITLE = "job_title"
+    DEPARTMENT = "department"
+    COUNTRY = "country"
+    ANNUAL_SALARY = "annual_salary"
+    HIRE_DATE = "hire_date"
+
+
+DEFAULT_EMPLOYEE_SORT_FIELD = EmployeeSortField.FULL_NAME
+SEARCH_MAX_LENGTH = 100

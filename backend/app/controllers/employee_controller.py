@@ -1,15 +1,28 @@
 from typing import Annotated
 
-from fastapi import APIRouter, Depends, Response, status
+from fastapi import APIRouter, Depends, Query, Response, status
 
 from app.constants.api_constants import EMPLOYEE_ID_PATH, EMPLOYEES_PATH, EMPLOYEES_TAG
 from app.dependencies.providers import get_employee_service
 from app.services.employee_service import EmployeeService
-from app.views.employee_view import EmployeeCreate, EmployeeResponse, EmployeeUpdate
+from app.views.employee_view import (
+    EmployeeCreate,
+    EmployeeListQuery,
+    EmployeeResponse,
+    EmployeeUpdate,
+)
 from app.views.error_view import ErrorResponse
+from app.views.pagination_view import PaginatedResponse
 
 router = APIRouter(prefix=EMPLOYEES_PATH, tags=[EMPLOYEES_TAG])
 EmployeeServiceDependency = Annotated[EmployeeService, Depends(get_employee_service)]
+
+
+@router.get("")
+def list_employees(
+    query: Annotated[EmployeeListQuery, Query()], service: EmployeeServiceDependency
+) -> PaginatedResponse[EmployeeResponse]:
+    return service.list_employees(query)
 
 
 @router.post(

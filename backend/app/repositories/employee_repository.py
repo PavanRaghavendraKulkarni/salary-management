@@ -1,10 +1,22 @@
 from collections.abc import Mapping
 from typing import Any
 
-from sqlalchemy import select
-from sqlalchemy.orm import Session
+from sqlalchemy import ColumnElement, Select, func, or_, select
+from sqlalchemy.orm import InstrumentedAttribute, Session
 
+from app.constants.employee_constants import EmployeeSortField
+from app.constants.pagination_constants import SortOrder
 from app.models.employee_model import Employee
+
+SORTABLE_COLUMNS: dict[EmployeeSortField, InstrumentedAttribute[Any]] = {
+    EmployeeSortField.FULL_NAME: Employee.full_name,
+    EmployeeSortField.EMAIL: Employee.email,
+    EmployeeSortField.JOB_TITLE: Employee.job_title,
+    EmployeeSortField.DEPARTMENT: Employee.department,
+    EmployeeSortField.COUNTRY: Employee.country,
+    EmployeeSortField.ANNUAL_SALARY: Employee.annual_salary,
+    EmployeeSortField.HIRE_DATE: Employee.hire_date,
+}
 
 
 class EmployeeRepository:
@@ -36,3 +48,62 @@ class EmployeeRepository:
     def delete(self, employee: Employee) -> None:
         self._session.delete(employee)
         self._session.commit()
+
+    def find_page(
+        self,
+        *,
+        search: str | None,
+        country: str | None,
+        department: str | None,
+        job_title: str | None,
+        sort_by: EmployeeSortField,
+        sort_order: SortOrder,
+        offset: int,
+        limit: int,
+    ) -> tuple[list[Employee], int]:
+        """Filter, count, sort and slice in SQL so only one page of rows is ever loaded."""
+        conditions = self._filter_conditions(search, country, department, job_title)
+        total = self._session.scalar(select(func.count(Employee.id)).where(*conditions)) or 0
+        statement = self._ordered(select(Employee).where(*conditions), sort_by, sort_order)
+        employees = self._session.scalars(statement.offset(offset).limit(limit)).all()
+        return list(employees), total
+
+    def distinct_countries(self) -> list[str]:
+        return self._distinct_values(Employee.country)
+
+    def distinct_departments(self) -> list[str]:
+        return self._distinct_values(Employee.department)
+
+    def distinct_job_titles(self) -> list[str]:
+        return self._distinct_values(Employee.job_title)
+
+    def _distinct_values(self, column: InstrumentedAttribute[str]) -> list[str]:
+        return list(self._session.scalars(select(column).distinct().order_by(column)).all())
+
+    @staticmethod
+    def _filter_conditions(
+        search: str | None, country: str | None, department: str | None, job_title: str | None
+    ) -> list[ColumnElement[bool]]:
+        conditions: list[ColumnElement[bool]] = []
+        if search:
+            conditions.append(
+                or_(
+                    Employee.full_name.icontains(search, autoescape=True),
+                    Employee.email.icontains(search, autoescape=True),
+                )
+            )
+        if country:
+            conditions.append(Employee.country == country)
+        if department:
+            conditions.append(Employee.department == department)
+        if job_title:
+            conditions.append(Employee.job_title == job_title)
+        return conditions
+
+    @staticmethod
+    def _ordered(
+        statement: Select[Employee], sort_by: EmployeeSortField, sort_order: SortOrder
+    ) -> Select[Employee]:
+        column = SORTABLE_COLUMNS[sort_by]
+        primary = column.desc() if sort_order == SortOrder.DESC else column.asc()
+        return statement.order_by(primary, Employee.id.asc())

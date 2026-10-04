@@ -8,6 +8,8 @@ HEALTH_PATH = "/health"
 EMPLOYEES_PATH = "/employees"
 EMPLOYEE_ID_PATH = "/{employee_id}"
 META_PATH = "/meta"
+META_FILTERS_PATH = "/filters"
+META_REFERENCE_DATA_PATH = "/reference-data"
 INSIGHTS_PATH = "/insights"
 
 HEALTH_TAG = "health"

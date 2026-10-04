@@ -4,16 +4,28 @@ from decimal import Decimal
 from pydantic import BaseModel, ConfigDict, EmailStr, Field
 
 from app.constants.employee_constants import (
+    DEFAULT_EMPLOYEE_SORT_FIELD,
     FULL_NAME_MAX_LENGTH,
     FULL_NAME_MIN_LENGTH,
     MAX_ANNUAL_SALARY,
     MIN_ANNUAL_SALARY_EXCLUSIVE,
     SALARY_PRECISION,
     SALARY_SCALE,
+    SEARCH_MAX_LENGTH,
     Country,
     Currency,
     Department,
+    EmployeeSortField,
     JobTitle,
+)
+from app.constants.pagination_constants import (
+    DEFAULT_PAGE,
+    DEFAULT_PAGE_SIZE,
+    DEFAULT_SORT_ORDER,
+    MAX_PAGE_SIZE,
+    MIN_PAGE,
+    MIN_PAGE_SIZE,
+    SortOrder,
 )
 
 
@@ -53,3 +65,16 @@ class EmployeeResponse(EmployeeFields):
     id: int
     created_at: datetime
     updated_at: datetime
+
+
+class EmployeeListQuery(BaseModel):
+    """Query parameters for listing employees; bounds stop clients requesting every row."""
+
+    search: str | None = Field(default=None, max_length=SEARCH_MAX_LENGTH)
+    country: Country | None = None
+    department: Department | None = None
+    job_title: JobTitle | None = None
+    page: int = Field(default=DEFAULT_PAGE, ge=MIN_PAGE)
+    page_size: int = Field(default=DEFAULT_PAGE_SIZE, ge=MIN_PAGE_SIZE, le=MAX_PAGE_SIZE)
+    sort_by: EmployeeSortField = DEFAULT_EMPLOYEE_SORT_FIELD
+    sort_order: SortOrder = DEFAULT_SORT_ORDER

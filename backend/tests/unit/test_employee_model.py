@@ -2,7 +2,7 @@ from sqlalchemy import inspect
 from sqlalchemy.engine import Engine
 
 
-def indexed_column_sets(engine: Engine) -> list[tuple[str, ...]]:
+def indexed_column_sets(engine: Engine) -> list[tuple[str | None, ...]]:
     return [tuple(index["column_names"]) for index in inspect(engine).get_indexes("employees")]
 
 
