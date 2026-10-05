@@ -1,5 +1,4 @@
 import Alert from '@mui/material/Alert';
-import Grid from '@mui/material/Grid2';
 import LinearProgress from '@mui/material/LinearProgress';
 import MenuItem from '@mui/material/MenuItem';
 import Stack from '@mui/material/Stack';
@@ -88,22 +87,17 @@ export default function InsightsPage() {
             />
           )}
 
-          <Grid container spacing={3}>
-            <Grid size={{ xs: 12, lg: 6 }}>
-              <SalaryStatsTable
-                title={INSIGHT_LABELS.BY_JOB_TITLE}
-                groupLabel={INSIGHT_LABELS.JOB_TITLE}
-                rows={toRows(jobTitleBreakdown)}
-              />
-            </Grid>
-            <Grid size={{ xs: 12, lg: 6 }}>
-              <SalaryStatsTable
-                title={INSIGHT_LABELS.BY_DEPARTMENT}
-                groupLabel={INSIGHT_LABELS.DEPARTMENT}
-                rows={toRows(departmentBreakdown)}
-              />
-            </Grid>
-          </Grid>
+          {/* Full width: side by side, seven columns did not fit and clipped the USD column. */}
+          <SalaryStatsTable
+            title={INSIGHT_LABELS.BY_JOB_TITLE}
+            groupLabel={INSIGHT_LABELS.JOB_TITLE}
+            rows={toRows(jobTitleBreakdown)}
+          />
+          <SalaryStatsTable
+            title={INSIGHT_LABELS.BY_DEPARTMENT}
+            groupLabel={INSIGHT_LABELS.DEPARTMENT}
+            rows={toRows(departmentBreakdown)}
+          />
         </>
       )}
     </Stack>

@@ -52,15 +52,18 @@ export default function SalaryStatsTable({
       <Typography variant="h6" component="h2" sx={{ px: 2, pt: 2 }}>
         {title}
       </Typography>
-      <TableContainer>
+      {/* Scrolls sideways on narrow screens so no column, including USD, is ever clipped. */}
+      <TableContainer sx={{ overflowX: 'auto' }}>
         <Table size="small" aria-label={title}>
           <TableHead>
             <TableRow>
               {groupColumns.map((label) => (
-                <TableCell key={label}>{label}</TableCell>
+                <TableCell key={label} sx={{ whiteSpace: 'nowrap' }}>
+                  {label}
+                </TableCell>
               ))}
               {STATISTIC_HEADERS.map((label) => (
-                <TableCell key={label} align="right">
+                <TableCell key={label} align="right" sx={{ whiteSpace: 'nowrap' }}>
                   {label}
                 </TableCell>
               ))}
