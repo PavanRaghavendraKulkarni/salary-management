@@ -1,18 +1,18 @@
 from collections.abc import Iterator
 from typing import Annotated
 
-from fastapi import Depends
-from sqlalchemy.orm import Session
+from fastapi import Depends, Request
+from sqlalchemy.orm import Session, sessionmaker
 
-from app.config.database import SessionFactory
 from app.repositories.employee_repository import EmployeeRepository
 from app.repositories.salary_insight_repository import SalaryInsightRepository
 from app.services.employee_service import EmployeeService
 from app.services.insight_service import InsightService
 
 
-def get_session() -> Iterator[Session]:
-    with SessionFactory() as session:
+def get_session(request: Request) -> Iterator[Session]:
+    session_factory: sessionmaker[Session] = request.app.state.session_factory
+    with session_factory() as session:
         yield session
 
 

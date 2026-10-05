@@ -2,7 +2,6 @@ from sqlalchemy import create_engine
 from sqlalchemy.engine import Engine
 from sqlalchemy.orm import Session, sessionmaker
 
-from app.config.settings import get_settings
 from app.models import Base
 
 SQLITE_URL_PREFIX = "sqlite"
@@ -15,10 +14,8 @@ def build_engine(database_url: str) -> Engine:
     return create_engine(database_url, connect_args=connect_args)
 
 
-engine = build_engine(get_settings().database_url)
-SessionFactory: sessionmaker[Session] = sessionmaker(
-    bind=engine, autoflush=False, expire_on_commit=False
-)
+def build_session_factory(engine: Engine) -> sessionmaker[Session]:
+    return sessionmaker(bind=engine, autoflush=False, expire_on_commit=False)
 
 
 def create_tables(target_engine: Engine) -> None:

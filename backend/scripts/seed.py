@@ -15,7 +15,8 @@ from typing import Any
 
 from faker import Faker
 
-from app.config.database import SessionFactory, create_tables, engine
+from app.config.database import build_engine, build_session_factory, create_tables
+from app.config.settings import get_settings
 from app.constants.employee_constants import (
     COUNTRY_CURRENCY,
     SALARY_QUANTUM,
@@ -129,8 +130,9 @@ def parse_arguments(argv: Sequence[str] | None) -> argparse.Namespace:
 def main(argv: Sequence[str] | None = None) -> None:
     logging.basicConfig(level=logging.INFO, format="%(message)s")
     arguments = parse_arguments(argv)
+    engine = build_engine(get_settings().database_url)
     create_tables(engine)
-    with SessionFactory() as session:
+    with build_session_factory(engine)() as session:
         inserted = seed_employees(
             EmployeeRepository(session),
             count=arguments.count,
