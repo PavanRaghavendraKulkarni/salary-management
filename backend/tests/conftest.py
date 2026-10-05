@@ -8,12 +8,10 @@ from sqlalchemy.engine import Engine
 from sqlalchemy.orm import Session, sessionmaker
 from sqlalchemy.pool import StaticPool
 
-from app.config.settings import Settings
 from app.dependencies.providers import get_session
 from app.main import create_app
 from app.models.base_model import Base
-
-IN_MEMORY_DATABASE_URL = "sqlite://"
+from tests.factories import IN_MEMORY_DATABASE_URL, build_test_settings
 
 
 @pytest.fixture
@@ -37,7 +35,7 @@ def session(engine: Engine) -> Iterator[Session]:
 
 @pytest.fixture
 def app(session: Session) -> FastAPI:
-    application = create_app(Settings(frontend_dist_dir=None))
+    application = create_app(build_test_settings())
     application.dependency_overrides[get_session] = lambda: session
     return application
 

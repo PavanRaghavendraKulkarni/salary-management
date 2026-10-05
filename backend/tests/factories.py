@@ -4,9 +4,20 @@ from typing import Any
 
 from sqlalchemy.orm import Session
 
+from app.config.settings import Settings
 from app.constants.employee_constants import Country, Currency, Department, JobTitle
 from app.models.employee_model import Employee
 from app.views.employee_view import EmployeeCreate, EmployeeUpdate
+
+IN_MEMORY_DATABASE_URL = "sqlite://"
+
+
+def build_test_settings(**overrides: Any) -> Settings:
+    """Settings that never touch the developer's database file or frontend build."""
+    return Settings(
+        **{"database_url": IN_MEMORY_DATABASE_URL, "frontend_dist_dir": None, **overrides}
+    )
+
 
 # Round USD rates for tests, so converted figures can be worked out by hand and do not
 # change when the real rates in constants are updated.

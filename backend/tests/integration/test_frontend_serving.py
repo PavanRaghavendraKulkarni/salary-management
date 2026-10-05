@@ -5,10 +5,10 @@ import pytest
 from fastapi import status
 from fastapi.testclient import TestClient
 
-from app.config.settings import Settings
 from app.constants.api_constants import API_V1_PREFIX
 from app.constants.message_constants import ErrorCode
 from app.main import create_app
+from tests.factories import build_test_settings
 
 INDEX_HTML = "<!doctype html><title>ACME</title>"
 SCRIPT_BODY = "console.log('app');"
@@ -25,7 +25,7 @@ def frontend_dist(tmp_path: Path) -> Path:
 
 @pytest.fixture
 def frontend_client(frontend_dist: Path) -> Iterator[TestClient]:
-    application = create_app(Settings(frontend_dist_dir=frontend_dist))
+    application = create_app(build_test_settings(frontend_dist_dir=frontend_dist))
     with TestClient(application) as test_client:
         yield test_client
 
@@ -78,7 +78,7 @@ def test_api_still_works_alongside_the_react_app(frontend_client: TestClient) ->
 
 
 def test_app_starts_without_a_frontend_build(tmp_path: Path) -> None:
-    application = create_app(Settings(frontend_dist_dir=tmp_path / "missing"))
+    application = create_app(build_test_settings(frontend_dist_dir=tmp_path / "missing"))
 
     with TestClient(application) as test_client:
         response = test_client.get("/")
