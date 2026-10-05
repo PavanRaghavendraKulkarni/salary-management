@@ -77,7 +77,7 @@ All endpoints are under `/api/v1`; interactive documentation is at `/docs`.
 | GET | `/insights/departments?country=` | Statistics per department in one country |
 | GET | `/insights/organization` | Organisation-wide statistics in approximate USD |
 
-Errors always look like `{"error": {"code": "...", "message": "..."}}`: 404 not found, 409 duplicate email, 422 invalid input.
+Errors always look like `{"error": {"code": "...", "message": "..."}}`: 404 not found, 409 duplicate email, 422 invalid input, and 500 `INTERNAL_ERROR` with a generic message for anything unexpected (the traceback is logged on the server, never sent to the client).
 
 ## Project structure
 

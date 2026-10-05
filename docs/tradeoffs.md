@@ -42,7 +42,7 @@ Countries, currencies, departments and job titles are enums in backend constants
 
 ## Tables created at start-up, no migration tool
 
-The schema is one table, so `create_all` at seed time is enough. Once the schema starts changing in production, Alembic migrations should replace it. Renaming `annual_salary` to `annual_gross_salary` showed the cost: `create_all` does not alter an existing table, so a local database has to be deleted and re-seeded. That was acceptable here because the data is seeded and the free-tier database is recreated on every deploy.
+The schema is one table, so `create_all` is enough. It runs when the app starts (so the API works on an empty database before any seed) and again in the seed script. Once the schema starts changing in production, Alembic migrations should replace it. Renaming `annual_salary` to `annual_gross_salary` showed the cost: `create_all` does not alter an existing table, so a local database has to be deleted and re-seeded. That was acceptable here because the data is seeded and the free-tier database is recreated on every deploy.
 
 ## Hard delete
 

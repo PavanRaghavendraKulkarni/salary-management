@@ -170,7 +170,7 @@ Add database indexes on `country`, `job_title`, `department`, and a composite in
 - `GET /insights/departments?country=`: the same, per department
 - `GET /insights/organization`: organisation-wide headcount, minimum, maximum, and average salary in approximate USD, converting each salary at fixed dated rates before aggregating
 
-Errors use one JSON shape, produced by central exception handlers: `{"error": {"code": "...", "message": "..."}}`. Use 404 for not found, 409 for a duplicate email, and 422 for validation errors.
+Errors use one JSON shape, produced by central exception handlers: `{"error": {"code": "...", "message": "..."}}`. Use 404 for not found, 409 for a duplicate email, 422 for validation errors, and 500 `INTERNAL_ERROR` for anything unexpected: log the traceback and return a generic message from constants, never internal details.
 
 ## Coding standards
 

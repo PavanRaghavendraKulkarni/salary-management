@@ -86,7 +86,7 @@ Money is `Decimal` end to end and serialised as a decimal **string** in JSON (fo
 
 Every `usd` block carries `rates_as_of`, the date of the fixed rates in `app/constants/currency_constants.py`. USD figures are computed in SQL as `MIN`/`MAX`/`AVG(salary * rate)`, with the rate chosen per row by a `CASE` on currency, so each employee weighs the same in the organisation-wide average. Rounding to cents happens once, in the service.
 
-Errors: `404 NOT_FOUND`, `409 DUPLICATE_EMAIL`, `422 VALIDATION_ERROR`, always as `{"error": {"code": "...", "message": "..."}}`.
+Errors: `404 NOT_FOUND`, `409 DUPLICATE_EMAIL`, `422 VALIDATION_ERROR`, and `500 INTERNAL_ERROR` for unexpected errors (logged with their traceback; the client gets a generic message), always as `{"error": {"code": "...", "message": "..."}}`.
 
 ## Performance
 
