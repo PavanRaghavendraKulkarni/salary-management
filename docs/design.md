@@ -88,6 +88,40 @@ Every `usd` block carries `rates_as_of`, the date of the fixed rates in `app/con
 
 Errors: `404 NOT_FOUND`, `409 DUPLICATE_EMAIL`, `422 VALIDATION_ERROR`, always as `{"error": {"code": "...", "message": "..."}}`.
 
+## Performance
+
+**All the heavy work happens in SQL.** Search, filters, sorting and pagination are part of one query (`WHERE ... ORDER BY ... LIMIT ... OFFSET`) plus a `COUNT` for the total. Only the requested page of rows is loaded into Python. Insight statistics use `GROUP BY` with `COUNT`, `MIN`, `MAX` and `AVG` in `SalaryInsightRepository`, so at most one row per group comes back. That is a few dozen rows, never 10,000.
+
+**Indexes and why each exists**
+
+| Index | Used by |
+|---|---|
+| `country` | The country filter on the employee list and the per-country `GROUP BY` |
+| `department` | The department filter |
+| `job_title` | The job-title filter |
+| (`country`, `job_title`) | The per-country job-title breakdown. `EXPLAIN QUERY PLAN` shows `SEARCH employees USING INDEX ix_employees_country_job_title (country=?)` |
+| `email` (unique) | Duplicate-email checks on create and update |
+
+**`page_size` limit.** The default is 20 and the maximum is 100. Larger values are rejected with 422, so no client can request every row in one call.
+
+**Measured on seeded data.** These figures come from 10,000 seeded employees on a local machine: uvicorn with one process, a SQLite file, one warm-up call, then three timed calls with `curl`.
+
+| Operation | Time |
+|---|---|
+| Seed 10,000 employees (batched multi-row `INSERT`) | about 1.1 s |
+| `GET /employees` (first page) | 3–5 ms |
+| `GET /employees` with search + country filter + salary sort | 4–5 ms |
+| `GET /employees?page=500` (last page, large `OFFSET`) | 13–16 ms |
+| `GET /meta/filters` | 3–4 ms |
+| `GET /insights/countries` | about 8 ms |
+| `GET /insights/job-titles?country=India` | about 4 ms |
+| `GET /insights/departments?country=Germany` | about 3 ms |
+| `GET /insights/organization` | about 4 ms |
+
+Deep pages are the slowest because `OFFSET` still scans the skipped rows. Keyset pagination would fix that if the data grew by orders of magnitude.
+
+**Floating-point note.** Salaries and exchange rates are `Decimal` in Python, and rounding to cents happens once, after aggregation. SQLite has no exact decimal type, though, so it computes `salary * rate`, `SUM` and `AVG` in double precision. At this scale the error is far below a cent; an independent check on the seeded data matched an exact `Decimal` calculation to the cent. PostgreSQL `NUMERIC` would make the arithmetic exact. Switching needs only a different `DATABASE_URL`, because the queries are written with SQLAlchemy.
+
 ## Extensibility
 
 - **Bonus or other pay components:** add a `compensation_components` table linked to an employee; insights can then sum components in SQL without changing the employee API.
