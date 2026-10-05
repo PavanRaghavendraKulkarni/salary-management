@@ -7,8 +7,8 @@ from app.constants.employee_constants import (
     DEFAULT_EMPLOYEE_SORT_FIELD,
     FULL_NAME_MAX_LENGTH,
     FULL_NAME_MIN_LENGTH,
-    MAX_ANNUAL_SALARY,
-    MIN_ANNUAL_SALARY_EXCLUSIVE,
+    MAX_ANNUAL_GROSS_SALARY,
+    MIN_ANNUAL_GROSS_SALARY_EXCLUSIVE,
     SALARY_PRECISION,
     SALARY_SCALE,
     SEARCH_MAX_LENGTH,
@@ -40,9 +40,9 @@ class EmployeeFields(BaseModel):
     department: Department
     country: Country
     currency: Currency
-    annual_salary: Decimal = Field(
-        gt=MIN_ANNUAL_SALARY_EXCLUSIVE,
-        le=MAX_ANNUAL_SALARY,
+    annual_gross_salary: Decimal = Field(
+        gt=MIN_ANNUAL_GROSS_SALARY_EXCLUSIVE,
+        le=MAX_ANNUAL_GROSS_SALARY,
         max_digits=SALARY_PRECISION,
         decimal_places=SALARY_SCALE,
     )

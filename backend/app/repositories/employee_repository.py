@@ -26,7 +26,7 @@ SORTABLE_COLUMNS: dict[EmployeeSortField, InstrumentedAttribute[Any]] = {
     EmployeeSortField.JOB_TITLE: Employee.job_title,
     EmployeeSortField.DEPARTMENT: Employee.department,
     EmployeeSortField.COUNTRY: Employee.country,
-    EmployeeSortField.ANNUAL_SALARY: Employee.annual_salary,
+    EmployeeSortField.ANNUAL_GROSS_SALARY: Employee.annual_gross_salary,
     EmployeeSortField.HIRE_DATE: Employee.hire_date,
 }
 
@@ -158,7 +158,7 @@ class EmployeeRepository:
         self, group_column: InstrumentedAttribute[str], *conditions: ColumnElement[bool]
     ) -> list[SalaryAggregate]:
         average = type_coerce(
-            func.round(func.avg(Employee.annual_salary), SALARY_SCALE),
+            func.round(func.avg(Employee.annual_gross_salary), SALARY_SCALE),
             Numeric(SALARY_PRECISION, SALARY_SCALE),
         )
         statement = (
@@ -166,8 +166,8 @@ class EmployeeRepository:
                 group_column,
                 Employee.currency,
                 func.count(Employee.id),
-                func.min(Employee.annual_salary),
-                func.max(Employee.annual_salary),
+                func.min(Employee.annual_gross_salary),
+                func.max(Employee.annual_gross_salary),
                 average,
             )
             .where(*conditions)

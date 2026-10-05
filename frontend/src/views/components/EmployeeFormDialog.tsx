@@ -110,7 +110,7 @@ export default function EmployeeFormDialog({
             </Grid>
             <Grid size={{ xs: 12, sm: 6 }}>
               <TextField
-                {...fieldProps('annual_salary')}
+                {...fieldProps('annual_gross_salary')}
                 required
                 slotProps={{ htmlInput: { inputMode: 'decimal' } }}
               />

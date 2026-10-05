@@ -10,8 +10,8 @@ CURRENCY_CODE_LENGTH = 3
 SALARY_PRECISION = 12
 SALARY_SCALE = 2
 SALARY_QUANTUM = Decimal("0.01")
-MIN_ANNUAL_SALARY_EXCLUSIVE = Decimal("0")
-MAX_ANNUAL_SALARY = Decimal("9999999999.99")
+MIN_ANNUAL_GROSS_SALARY_EXCLUSIVE = Decimal("0")
+MAX_ANNUAL_GROSS_SALARY = Decimal("9999999999.99")
 
 
 class Currency(StrEnum):
@@ -83,7 +83,7 @@ class EmployeeSortField(StrEnum):
     JOB_TITLE = "job_title"
     DEPARTMENT = "department"
     COUNTRY = "country"
-    ANNUAL_SALARY = "annual_salary"
+    ANNUAL_GROSS_SALARY = "annual_gross_salary"
     HIRE_DATE = "hire_date"
 
 

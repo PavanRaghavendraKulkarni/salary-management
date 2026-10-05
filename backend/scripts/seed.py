@@ -65,7 +65,7 @@ class EmployeeRecordGenerator:
             "department": JOB_TITLE_DEPARTMENT[job_title].value,
             "country": country.value,
             "currency": COUNTRY_CURRENCY[country].value,
-            "annual_salary": self._annual_salary(country, job_title),
+            "annual_gross_salary": self._annual_gross_salary(country, job_title),
             "hire_date": self._today
             - timedelta(days=self._random.randint(0, SEED_MAX_TENURE_DAYS)),
         }
@@ -86,7 +86,7 @@ class EmployeeRecordGenerator:
         )
         return f"{cleaned or SEED_EMAIL_FALLBACK_NAME}.{sequence_number}@{SEED_EMAIL_DOMAIN}"
 
-    def _annual_salary(self, country: Country, job_title: JobTitle) -> Decimal:
+    def _annual_gross_salary(self, country: Country, job_title: JobTitle) -> Decimal:
         low, high = COUNTRY_BASE_SALARY_BAND[country]
         base = Decimal(str(self._random.uniform(float(low), float(high))))
         salary = base * JOB_TITLE_SALARY_MULTIPLIER[job_title]

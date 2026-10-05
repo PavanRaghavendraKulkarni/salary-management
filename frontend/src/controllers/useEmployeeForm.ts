@@ -16,14 +16,31 @@ const EMPTY_VALUES: EmployeeInput = {
   department: '',
   country: '',
   currency: '',
-  annual_salary: '',
+  annual_gross_salary: '',
   hire_date: '',
 };
 
 function toFormValues(employee: Employee): EmployeeInput {
-  const { full_name, email, job_title, department, country, currency, annual_salary, hire_date } =
-    employee;
-  return { full_name, email, job_title, department, country, currency, annual_salary, hire_date };
+  const {
+    full_name,
+    email,
+    job_title,
+    department,
+    country,
+    currency,
+    annual_gross_salary,
+    hire_date,
+  } = employee;
+  return {
+    full_name,
+    email,
+    job_title,
+    department,
+    country,
+    currency,
+    annual_gross_salary,
+    hire_date,
+  };
 }
 
 function trimmed(values: EmployeeInput): EmployeeInput {
@@ -31,7 +48,7 @@ function trimmed(values: EmployeeInput): EmployeeInput {
     ...values,
     full_name: values.full_name.trim(),
     email: values.email.trim(),
-    annual_salary: values.annual_salary.trim(),
+    annual_gross_salary: values.annual_gross_salary.trim(),
   };
 }
 

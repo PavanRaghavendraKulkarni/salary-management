@@ -10,7 +10,7 @@ export interface Employee {
   country: string;
   currency: string;
   /** Decimal string such as "85000.00", kept as text so no precision is lost. */
-  annual_salary: string;
+  annual_gross_salary: string;
   /** ISO date, YYYY-MM-DD. */
   hire_date: string;
   created_at: string;

@@ -38,8 +38,8 @@ interface EmployeeTableProps {
 }
 
 function cellValue(employee: Employee, field: EmployeeSortField): string {
-  return field === EMPLOYEE_SORT_FIELDS.ANNUAL_SALARY
-    ? formatCurrency(employee.annual_salary, employee.currency)
+  return field === EMPLOYEE_SORT_FIELDS.ANNUAL_GROSS_SALARY
+    ? formatCurrency(employee.annual_gross_salary, employee.currency)
     : employee[field];
 }
 

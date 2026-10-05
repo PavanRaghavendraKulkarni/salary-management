@@ -10,7 +10,7 @@ SEED_EMAIL_FALLBACK_NAME = "employee"
 SEED_MAX_TENURE_DAYS = 15 * 365
 SEED_SALARY_ROUNDING = Decimal("100")
 
-# Annual base salary band for a mid-level Software Engineer, in each country's local currency.
+# Annual gross base salary band for a mid-level Software Engineer, in each country's local currency.
 COUNTRY_BASE_SALARY_BAND: dict[Country, tuple[Decimal, Decimal]] = {
     Country.UNITED_STATES: (Decimal("95000"), Decimal("140000")),
     Country.UNITED_KINGDOM: (Decimal("50000"), Decimal("80000")),

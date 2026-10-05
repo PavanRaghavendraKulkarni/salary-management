@@ -47,7 +47,7 @@ export const FIELD_LABELS = {
   department: 'Department',
   country: 'Country',
   currency: 'Currency',
-  annual_salary: 'Annual salary',
+  annual_gross_salary: 'Annual gross salary',
   hire_date: 'Hire date',
 } as const;
 
@@ -84,7 +84,7 @@ export function deleteConfirmationMessage(fullName: string): string {
 
 export const INSIGHT_LABELS = {
   INTRO:
-    'Salaries are annual base pay in each country’s local currency, so figures are only compared within a country.',
+    'Salaries are annual gross base pay in each country’s local currency, so figures are only compared within a country.',
   COUNTRY_SUMMARY: 'Pay by country',
   COUNTRY_SUMMARY_HINT: 'Select a country to see its breakdown.',
   COUNTRY_SELECT: 'Country',

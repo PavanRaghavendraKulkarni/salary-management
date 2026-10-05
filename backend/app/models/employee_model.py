@@ -16,7 +16,7 @@ from app.models.base_model import Base, TimestampMixin
 
 
 class Employee(TimestampMixin, Base):
-    """One employee and their current annual base salary in local currency."""
+    """One employee and their current annual gross base salary in local currency."""
 
     __tablename__ = "employees"
     __table_args__ = (Index("ix_employees_country_job_title", "country", "job_title"),)
@@ -28,5 +28,5 @@ class Employee(TimestampMixin, Base):
     department: Mapped[str] = mapped_column(String(CATEGORY_MAX_LENGTH), index=True)
     country: Mapped[str] = mapped_column(String(CATEGORY_MAX_LENGTH), index=True)
     currency: Mapped[str] = mapped_column(String(CURRENCY_CODE_LENGTH))
-    annual_salary: Mapped[Decimal] = mapped_column(Numeric(SALARY_PRECISION, SALARY_SCALE))
+    annual_gross_salary: Mapped[Decimal] = mapped_column(Numeric(SALARY_PRECISION, SALARY_SCALE))
     hire_date: Mapped[date]

@@ -19,7 +19,8 @@ function validateSalary(salary: string): string | undefined {
   if (!EMPLOYEE_VALIDATION.SALARY_PATTERN.test(trimmed)) return VALIDATION_MESSAGES.SALARY_INVALID;
   const amount = Number(trimmed);
   if (amount <= 0) return VALIDATION_MESSAGES.SALARY_POSITIVE;
-  if (amount > EMPLOYEE_VALIDATION.MAX_ANNUAL_SALARY) return VALIDATION_MESSAGES.SALARY_TOO_HIGH;
+  if (amount > EMPLOYEE_VALIDATION.MAX_ANNUAL_GROSS_SALARY)
+    return VALIDATION_MESSAGES.SALARY_TOO_HIGH;
   return undefined;
 }
 
@@ -34,8 +35,8 @@ export function validateEmployeeForm(values: EmployeeInput, today: string): Empl
   REQUIRED_SELECTIONS.forEach((field) => {
     if (!values[field]) errors[field] = VALIDATION_MESSAGES.REQUIRED;
   });
-  const salaryError = validateSalary(values.annual_salary);
-  if (salaryError) errors.annual_salary = salaryError;
+  const salaryError = validateSalary(values.annual_gross_salary);
+  if (salaryError) errors.annual_gross_salary = salaryError;
   if (values.hire_date && values.hire_date > today) {
     errors.hire_date = VALIDATION_MESSAGES.HIRE_DATE_FUTURE;
   }
