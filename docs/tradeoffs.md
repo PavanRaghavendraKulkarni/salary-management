@@ -51,3 +51,7 @@ Deleting an employee removes the row. Audit history is out of scope; `created_at
 ## Red test commits in the history
 
 Each behaviour is committed as a failing `test:` commit followed immediately by the commit that makes it pass, so the history shows the tests were written first. The cost is that the red commit alone does not pass its tests, which matters for `git bisect` or a checkout of that exact commit. To contain this, every other commit must pass all tests, a red commit is always followed directly by its green commit, and the two are always pushed together.
+
+## Unexpected errors logged twice
+
+Unexpected errors are logged twice in production, once by our 500 handler (with the request method and path) and once by uvicorn, because Starlette re-raises after the handler responds; this is accepted to keep the default server behaviour.
