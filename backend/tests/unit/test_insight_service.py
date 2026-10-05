@@ -4,7 +4,7 @@ import pytest
 from sqlalchemy.orm import Session
 
 from app.constants.employee_constants import Country, Currency, JobTitle
-from app.repositories.employee_repository import EmployeeRepository
+from app.repositories.salary_insight_repository import SalaryInsightRepository
 from app.services.insight_service import InsightService
 from tests.factories import (
     TEST_RATES_AS_OF,
@@ -20,7 +20,7 @@ UNITED_STATES = {"country": Country.UNITED_STATES.value, "currency": Currency.US
 @pytest.fixture
 def service(session: Session) -> InsightService:
     return InsightService(
-        EmployeeRepository(session), usd_rates=TEST_USD_RATES, rates_as_of=TEST_RATES_AS_OF
+        SalaryInsightRepository(session), usd_rates=TEST_USD_RATES, rates_as_of=TEST_RATES_AS_OF
     )
 
 

@@ -4,9 +4,9 @@ from decimal import ROUND_HALF_UP, Decimal
 
 from app.constants.currency_constants import USD_EXCHANGE_RATES, USD_EXCHANGE_RATES_AS_OF
 from app.constants.employee_constants import COUNTRY_CURRENCY, SALARY_QUANTUM, Country, Currency
-from app.repositories.employee_repository import (
-    EmployeeRepository,
+from app.repositories.salary_insight_repository import (
     SalaryAggregate,
+    SalaryInsightRepository,
     UsdAggregate,
 )
 from app.views.insight_view import (
@@ -27,7 +27,7 @@ class InsightService:
 
     def __init__(
         self,
-        repository: EmployeeRepository,
+        repository: SalaryInsightRepository,
         usd_rates: Mapping[Currency, Decimal] = USD_EXCHANGE_RATES,
         rates_as_of: date = USD_EXCHANGE_RATES_AS_OF,
     ) -> None:

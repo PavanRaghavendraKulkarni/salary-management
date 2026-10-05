@@ -10,7 +10,7 @@ from app.constants.currency_constants import USD_EXCHANGE_RATES, USD_EXCHANGE_RA
 from app.constants.employee_constants import Country, Currency, Department, JobTitle
 from app.constants.message_constants import ErrorCode
 from app.dependencies.providers import get_insight_service
-from app.repositories.employee_repository import EmployeeRepository
+from app.repositories.salary_insight_repository import SalaryInsightRepository
 from app.services.insight_service import InsightService
 from tests.factories import (
     TEST_RATES_AS_OF,
@@ -27,7 +27,7 @@ RATES_AS_OF = TEST_RATES_AS_OF.isoformat()
 def insight_dataset(app: FastAPI, session: Session) -> None:
     """The hand-built dataset, converted with the round test rates."""
     app.dependency_overrides[get_insight_service] = lambda: InsightService(
-        EmployeeRepository(session), usd_rates=TEST_USD_RATES, rates_as_of=TEST_RATES_AS_OF
+        SalaryInsightRepository(session), usd_rates=TEST_USD_RATES, rates_as_of=TEST_RATES_AS_OF
     )
     insert_employees(session, build_insight_dataset())
 
