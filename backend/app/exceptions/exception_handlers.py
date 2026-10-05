@@ -47,13 +47,15 @@ def describe_validation_errors(errors: Sequence[Any]) -> str:
     return FIELD_ERROR_SEPARATOR.join(descriptions) or VALIDATION_ERROR_MESSAGE
 
 
-async def handle_domain_error(_: Request, error: Exception) -> JSONResponse:
-    assert isinstance(error, DomainError)
+async def handle_domain_error(request: Request, error: Exception) -> JSONResponse:
+    if not isinstance(error, DomainError):
+        return await handle_unexpected_error(request, error)
     return build_error_response(error.code, error.message)
 
 
-async def handle_request_validation_error(_: Request, error: Exception) -> JSONResponse:
-    assert isinstance(error, RequestValidationError)
+async def handle_request_validation_error(request: Request, error: Exception) -> JSONResponse:
+    if not isinstance(error, RequestValidationError):
+        return await handle_unexpected_error(request, error)
     return build_error_response(
         ErrorCode.VALIDATION_ERROR, describe_validation_errors(error.errors())
     )
