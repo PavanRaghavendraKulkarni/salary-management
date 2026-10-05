@@ -79,13 +79,16 @@ Money is `Decimal` end to end and serialised as a decimal **string** in JSON (fo
 | DELETE | `/employees/{id}` | Delete (204) |
 | GET | `/meta/filters` | Distinct countries, departments and job titles present in the data |
 | GET | `/meta/reference-data` | Allowed values and the country-to-currency mapping for the form |
-| GET | `/insights/countries` | Per country: currency, headcount, min, max, average |
-| GET | `/insights/job-titles?country=` | Per job title within a country |
-| GET | `/insights/departments?country=` | Per department within a country |
+| GET | `/insights/countries` | Per country: currency, headcount, min, max, average, plus `usd_rate` and approximate `usd` figures |
+| GET | `/insights/job-titles?country=` | Per job title within a country, in local currency and approximate USD |
+| GET | `/insights/departments?country=` | Per department within a country, in local currency and approximate USD |
+| GET | `/insights/organization` | Organisation-wide headcount, min, max, average in approximate USD |
+
+Every `usd` block carries `rates_as_of`, the date of the fixed rates in `app/constants/currency_constants.py`. USD figures are computed in SQL as `MIN`/`MAX`/`AVG(salary * rate)`, with the rate chosen per row by a `CASE` on currency, so each employee weighs the same in the organisation-wide average. Rounding to cents happens once, in the service.
 
 Errors: `404 NOT_FOUND`, `409 DUPLICATE_EMAIL`, `422 VALIDATION_ERROR`, always as `{"error": {"code": "...", "message": "..."}}`.
 
 ## Extensibility
 
 - **Bonus or other pay components:** add a `compensation_components` table linked to an employee; insights can then sum components in SQL without changing the employee API.
-- **Currency conversion:** add an exchange-rate table and an optional `reporting_currency` query parameter to the insight endpoints; the existing per-country, local-currency output stays the default.
+- **Live or historical exchange rates:** replace the rate constants with an `exchange_rates` table keyed by currency and date. The service already receives its rates and date as constructor arguments, so only the provider changes.

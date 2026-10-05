@@ -3,7 +3,7 @@
 A web app for ACME's HR team to manage salary records for 10,000 employees across nine countries, and to see how the organisation pays people.
 
 - **Employees:** search by name or email, filter by country, department and job title, sort any column, page through results, and add, edit or delete employees with validation.
-- **Insights:** headcount and minimum, average and maximum salary per country (in local currency), with job title and department breakdowns and a chart for the selected country.
+- **Insights:** headcount and minimum, average and maximum annual gross salary per country in local currency, with job title and department breakdowns and a chart for the selected country. Approximate USD figures, converted at fixed dated rates, allow comparison across countries and give an organisation-wide view.
 
 **Live app:** _add the Render URL here after the first deploy_
 
@@ -75,6 +75,7 @@ All endpoints are under `/api/v1`; interactive documentation is at `/docs`.
 | GET | `/insights/countries` | Statistics per country |
 | GET | `/insights/job-titles?country=` | Statistics per job title in one country |
 | GET | `/insights/departments?country=` | Statistics per department in one country |
+| GET | `/insights/organization` | Organisation-wide statistics in approximate USD |
 
 Errors always look like `{"error": {"code": "...", "message": "..."}}`: 404 not found, 409 duplicate email, 422 invalid input.
 

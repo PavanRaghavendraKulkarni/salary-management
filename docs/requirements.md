@@ -16,7 +16,8 @@ Spreadsheets at this size are slow, error-prone (duplicate rows, wrong currency 
 
 - View employees in a paginated table with search (name or email), filters (country, department, job title) and sorting.
 - Add, edit and delete an employee, with validation of every field.
-- Salary insights: per country (headcount, min, max, average) and, within a country, per job title and per department.
+- Salary insights: per country (headcount, min, max, average) and, within a country, per job title and per department, each in local currency and as an approximate USD figure.
+- An organisation-wide view (headcount, min, max, average) in USD, so HR can compare pay across countries.
 - A seed of 10,000 realistic employees so the app can be evaluated immediately.
 
 ## Out of scope
@@ -28,12 +29,12 @@ Spreadsheets at this size are slow, error-prone (duplicate rows, wrong currency 
 | Payroll processing and tax | Different domain with legal rules per country. |
 | Excel import or export | Valuable, but not required to prove the core workflow. |
 | Audit history | Needs a separate design (event log); `created_at` / `updated_at` cover the basics. |
-| Currency conversion | See assumptions. |
+| Live exchange rates | USD figures use fixed rates; see assumption 2. |
 
 ## Assumptions
 
 1. **Confirmed:** salary means the **annual gross base salary** of a full-time employee, stored as `annual_gross_salary`. Bonus, deductions and equity are out of scope.
-2. Each country has exactly one currency, and insights are reported **per country in local currency**. No cross-currency totals are shown, because they would need exchange rates.
+2. **Confirmed:** salaries are stored in each country's **local currency**, which is exact. Insights also show **approximate USD** figures, converted with **fixed exchange rates** kept in backend constants with an "as of" date. Fixed rates make every figure reproducible and testable and need no external service; the "as of" date is shown next to every USD figure so nobody mistakes them for current rates. Each salary is converted before aggregating, so the organisation-wide average weighs every employee equally rather than every country. Each country has exactly one currency.
 3. Allowed countries (9), departments (9) and job titles (12) are a fixed list in backend constants; changing them is a code change.
 4. Emails are unique and compared case-insensitively (stored lowercase).
 5. Hire dates cannot be in the future; there is no lower bound.

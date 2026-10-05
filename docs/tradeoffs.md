@@ -10,9 +10,15 @@ SQLite needs no server, makes tests fast (in-memory, isolated per test) and is a
 
 HR salary data is sensitive, so a real deployment must have authentication and role-based access. It was left out on purpose to keep the exercise focused on the salary workflows. It would sit in front of every route as a FastAPI dependency, without changing services or repositories.
 
-## Salaries reported per country, in local currency
+## Local currency first, USD as an approximate view
 
-Each employee's salary is stored in the currency of their country, and every statistic is reported per country. Cross-country totals or averages would need exchange rates (and a decision on which date's rates), and mixing currencies would give misleading numbers. The chart therefore compares job titles *within* one country. Adding conversion later means an exchange-rate table and an optional `reporting_currency` parameter on the insight endpoints.
+Each salary is stored in the currency of its country, and every per-country statistic is exact in that currency. For comparisons across countries, and for the organisation-wide view, the insights also show USD figures. Each salary is converted before aggregating (`AVG(salary * rate)` in SQL): averaging the per-country averages instead would weigh a country of 300 people the same as one of 3,000. The chart stays in local currency because it compares job titles within one country.
+
+## Fixed exchange rates instead of live rates
+
+USD rates are `Decimal` constants with an "as of" date (`app/constants/currency_constants.py`), and the date is shown next to every USD figure. They are derived from the ECB euro foreign exchange reference rates of 2 October 2026: USD per unit = (USD per EUR) / (currency per EUR), with USD per EUR = 1.1225. Fixed rates make results reproducible, so a figure in a report can be checked later and tests can assert exact values. They also avoid a network dependency, an API key and failure handling for a rate provider. The cost is that USD figures drift from reality as rates move, so they are labelled approximate and the constants need an occasional update. If HR needs current or historical rates, the next step is an `exchange_rates` table keyed by currency and date, refreshed from a provider, with the reporting date as a query parameter.
+
+Rates and the final figures are `Decimal`, and rounding happens once, after aggregation. SQLite still computes `salary * rate` and `AVG` in double precision, which is far below a cent at this scale; PostgreSQL `NUMERIC` would make the arithmetic exact as well.
 
 ## Decimal for money
 
