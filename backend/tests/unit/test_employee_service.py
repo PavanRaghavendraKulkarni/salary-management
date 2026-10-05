@@ -84,11 +84,11 @@ def test_update_employee_replaces_editable_fields(service: EmployeeService) -> N
 
     updated = service.update_employee(
         created.id,
-        build_employee_update(full_name="Asha Rao-Menon", annual_salary="1750000.00"),
+        build_employee_update(full_name="Asha Rao-Menon", annual_gross_salary="1750000.00"),
     )
 
     assert updated.full_name == "Asha Rao-Menon"
-    assert str(updated.annual_salary) == "1750000.00"
+    assert str(updated.annual_gross_salary) == "1750000.00"
     assert updated.created_at == created.created_at
     assert updated.updated_at > created.updated_at
 

@@ -115,14 +115,17 @@ describe('useEmployees', () => {
   it('sorts ascending by a new column and toggles direction on the same column', async () => {
     const { result } = await renderLoadedHook();
 
-    act(() => result.current.setSort(EMPLOYEE_SORT_FIELDS.ANNUAL_SALARY));
+    act(() => result.current.setSort(EMPLOYEE_SORT_FIELDS.ANNUAL_GROSS_SALARY));
     await waitFor(() =>
-      expect(lastListParams()).toMatchObject({ sort_by: 'annual_salary', sort_order: 'asc' }),
+      expect(lastListParams()).toMatchObject({ sort_by: 'annual_gross_salary', sort_order: 'asc' }),
     );
 
-    act(() => result.current.setSort(EMPLOYEE_SORT_FIELDS.ANNUAL_SALARY));
+    act(() => result.current.setSort(EMPLOYEE_SORT_FIELDS.ANNUAL_GROSS_SALARY));
     await waitFor(() =>
-      expect(lastListParams()).toMatchObject({ sort_by: 'annual_salary', sort_order: 'desc' }),
+      expect(lastListParams()).toMatchObject({
+        sort_by: 'annual_gross_salary',
+        sort_order: 'desc',
+      }),
     );
   });
 

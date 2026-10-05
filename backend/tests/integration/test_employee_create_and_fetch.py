@@ -22,7 +22,7 @@ def test_create_employee_returns_201_with_the_employee(client: TestClient) -> No
     body = response.json()
     assert body["id"] > 0
     assert body["email"] == payload["email"]
-    assert body["annual_salary"] == payload["annual_salary"]
+    assert body["annual_gross_salary"] == payload["annual_gross_salary"]
     assert body["created_at"] is not None
     assert body["updated_at"] is not None
 
@@ -38,7 +38,7 @@ def test_create_employee_rejects_duplicate_email(client: TestClient) -> None:
 
 @pytest.mark.parametrize("salary", ["0", "-1", "-5000.50"])
 def test_create_employee_rejects_salary_of_zero_or_below(client: TestClient, salary: str) -> None:
-    response = client.post(EMPLOYEES_URL, json=build_employee_payload(annual_salary=salary))
+    response = client.post(EMPLOYEES_URL, json=build_employee_payload(annual_gross_salary=salary))
 
     assert response.status_code == status.HTTP_422_UNPROCESSABLE_CONTENT
     assert response.json()["error"]["code"] == ErrorCode.VALIDATION_ERROR

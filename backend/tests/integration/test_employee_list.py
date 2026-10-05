@@ -37,7 +37,7 @@ def mixed_employees(session: Session) -> None:
                 currency=Currency.INR.value,
                 department=Department.ENGINEERING.value,
                 job_title=JobTitle.SOFTWARE_ENGINEER.value,
-                annual_salary="1800000.00",
+                annual_gross_salary="1800000.00",
             ),
             build_employee_record(
                 full_name="Ravi Kumar",
@@ -46,7 +46,7 @@ def mixed_employees(session: Session) -> None:
                 currency=Currency.INR.value,
                 department=Department.SALES.value,
                 job_title=JobTitle.SALES_REPRESENTATIVE.value,
-                annual_salary="900000.00",
+                annual_gross_salary="900000.00",
             ),
             build_employee_record(
                 full_name="Hannah Weber",
@@ -55,7 +55,7 @@ def mixed_employees(session: Session) -> None:
                 currency=Currency.EUR.value,
                 department=Department.ENGINEERING.value,
                 job_title=JobTitle.SOFTWARE_ENGINEER.value,
-                annual_salary="70000.00",
+                annual_gross_salary="70000.00",
             ),
             build_employee_record(
                 full_name="John Smith",
@@ -64,7 +64,7 @@ def mixed_employees(session: Session) -> None:
                 currency=Currency.USD.value,
                 department=Department.FINANCE.value,
                 job_title=JobTitle.ACCOUNTANT.value,
-                annual_salary="95000.00",
+                annual_gross_salary="95000.00",
             ),
         ],
     )
@@ -193,7 +193,7 @@ def test_list_employees_sorts_by_salary_ascending(
     client: TestClient, mixed_employees: None
 ) -> None:
     body = list_employees(
-        client, country=Country.INDIA.value, sort_by="annual_salary", sort_order="asc"
+        client, country=Country.INDIA.value, sort_by="annual_gross_salary", sort_order="asc"
     )
 
     assert names_of(body) == ["Ravi Kumar", "Priya Shah"]
@@ -203,7 +203,7 @@ def test_list_employees_sorts_by_salary_descending(
     client: TestClient, mixed_employees: None
 ) -> None:
     body = list_employees(
-        client, country=Country.INDIA.value, sort_by="annual_salary", sort_order="desc"
+        client, country=Country.INDIA.value, sort_by="annual_gross_salary", sort_order="desc"
     )
 
     assert names_of(body) == ["Priya Shah", "Ravi Kumar"]

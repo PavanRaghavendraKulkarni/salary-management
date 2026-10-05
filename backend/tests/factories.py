@@ -15,7 +15,7 @@ DEFAULT_EMPLOYEE_FIELDS: dict[str, Any] = {
     "department": Department.ENGINEERING.value,
     "country": Country.INDIA.value,
     "currency": Currency.INR.value,
-    "annual_salary": "1500000.00",
+    "annual_gross_salary": "1500000.00",
     "hire_date": "2022-04-01",
 }
 
@@ -40,7 +40,7 @@ def build_employee_record(**overrides: Any) -> dict[str, Any]:
     fields = build_employee_payload(**overrides)
     return {
         **fields,
-        "annual_salary": Decimal(str(fields["annual_salary"])),
+        "annual_gross_salary": Decimal(str(fields["annual_gross_salary"])),
         "hire_date": date.fromisoformat(str(fields["hire_date"])),
     }
 
@@ -80,24 +80,24 @@ def build_insight_dataset() -> list[dict[str, Any]]:
     }
     return [
         build_employee_record(
-            email="in1@acme.com", annual_salary="1000000.00", **india, **engineer
+            email="in1@acme.com", annual_gross_salary="1000000.00", **india, **engineer
         ),
         build_employee_record(
-            email="in2@acme.com", annual_salary="1500000.00", **india, **engineer
+            email="in2@acme.com", annual_gross_salary="1500000.00", **india, **engineer
         ),
         build_employee_record(
             email="in3@acme.com",
-            annual_salary="700000.00",
+            annual_gross_salary="700000.00",
             job_title=JobTitle.SALES_REPRESENTATIVE.value,
             department=Department.SALES.value,
             **india,
         ),
         build_employee_record(
-            email="de1@acme.com", annual_salary="60000.00", **germany, **engineer
+            email="de1@acme.com", annual_gross_salary="60000.00", **germany, **engineer
         ),
         build_employee_record(
             email="de2@acme.com",
-            annual_salary="50000.20",
+            annual_gross_salary="50000.20",
             job_title=JobTitle.ACCOUNTANT.value,
             department=Department.FINANCE.value,
             **germany,

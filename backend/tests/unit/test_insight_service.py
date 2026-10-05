@@ -41,9 +41,9 @@ def test_average_with_fractional_cents_rounds_to_the_nearest_cent(
     insert_employees(
         session,
         [
-            build_employee_record(email="a@acme.com", annual_salary="100.00"),
-            build_employee_record(email="b@acme.com", annual_salary="100.00"),
-            build_employee_record(email="c@acme.com", annual_salary="100.02"),
+            build_employee_record(email="a@acme.com", annual_gross_salary="100.00"),
+            build_employee_record(email="b@acme.com", annual_gross_salary="100.00"),
+            build_employee_record(email="c@acme.com", annual_gross_salary="100.02"),
         ],
     )
 

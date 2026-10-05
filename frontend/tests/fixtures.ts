@@ -9,7 +9,7 @@ export function buildEmployee(overrides: Partial<Employee> = {}): Employee {
     department: 'Engineering',
     country: 'India',
     currency: 'INR',
-    annual_salary: '1500000.00',
+    annual_gross_salary: '1500000.00',
     hire_date: '2022-04-01',
     created_at: '2024-01-01T00:00:00',
     updated_at: '2024-01-01T00:00:00',

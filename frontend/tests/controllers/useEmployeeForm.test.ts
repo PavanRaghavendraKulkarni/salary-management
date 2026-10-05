@@ -28,7 +28,7 @@ const VALID_VALUES: EmployeeInput = {
   department: 'Engineering',
   country: 'India',
   currency: 'INR',
-  annual_salary: '1500000.00',
+  annual_gross_salary: '1500000.00',
   hire_date: '2022-04-01',
 };
 
@@ -45,13 +45,13 @@ describe('validateEmployeeForm', () => {
     ['job_title', '', VALIDATION_MESSAGES.REQUIRED],
     ['department', '', VALIDATION_MESSAGES.REQUIRED],
     ['country', '', VALIDATION_MESSAGES.REQUIRED],
-    ['annual_salary', '', VALIDATION_MESSAGES.SALARY_INVALID],
-    ['annual_salary', 'abc', VALIDATION_MESSAGES.SALARY_INVALID],
-    ['annual_salary', '100.123', VALIDATION_MESSAGES.SALARY_INVALID],
-    ['annual_salary', '-5', VALIDATION_MESSAGES.SALARY_INVALID],
-    ['annual_salary', '0', VALIDATION_MESSAGES.SALARY_POSITIVE],
-    ['annual_salary', '0.00', VALIDATION_MESSAGES.SALARY_POSITIVE],
-    ['annual_salary', '99999999999', VALIDATION_MESSAGES.SALARY_TOO_HIGH],
+    ['annual_gross_salary', '', VALIDATION_MESSAGES.SALARY_INVALID],
+    ['annual_gross_salary', 'abc', VALIDATION_MESSAGES.SALARY_INVALID],
+    ['annual_gross_salary', '100.123', VALIDATION_MESSAGES.SALARY_INVALID],
+    ['annual_gross_salary', '-5', VALIDATION_MESSAGES.SALARY_INVALID],
+    ['annual_gross_salary', '0', VALIDATION_MESSAGES.SALARY_POSITIVE],
+    ['annual_gross_salary', '0.00', VALIDATION_MESSAGES.SALARY_POSITIVE],
+    ['annual_gross_salary', '99999999999', VALIDATION_MESSAGES.SALARY_TOO_HIGH],
     ['hire_date', '', VALIDATION_MESSAGES.REQUIRED],
     ['hire_date', '2026-01-16', VALIDATION_MESSAGES.HIRE_DATE_FUTURE],
   ] as const)('rejects %s = "%s"', (field, value, message) => {
@@ -154,13 +154,13 @@ describe('useEmployeeForm', () => {
   it('updates the employee being edited', async () => {
     const { result } = await renderFormHook();
     act(() => result.current.openEdit(buildEmployee({ id: 42 })));
-    act(() => result.current.setField('annual_salary', '1600000.00'));
+    act(() => result.current.setField('annual_gross_salary', '1600000.00'));
 
     await act(() => result.current.submit());
 
     expect(service.update).toHaveBeenCalledWith(
       42,
-      expect.objectContaining({ annual_salary: '1600000.00' }),
+      expect.objectContaining({ annual_gross_salary: '1600000.00' }),
     );
     expect(onSaved).toHaveBeenCalledWith(SUCCESS_MESSAGES.EMPLOYEE_UPDATED);
   });

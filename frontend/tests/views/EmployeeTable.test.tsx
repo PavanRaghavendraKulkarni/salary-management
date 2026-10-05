@@ -17,7 +17,7 @@ function renderTable(overrides: Partial<Parameters<typeof EmployeeTable>[0]> = {
         email: 'j.smith@acme.com',
         country: 'United States',
         currency: 'USD',
-        annual_salary: '95000.00',
+        annual_gross_salary: '95000.00',
       }),
     ],
     total: 2,
@@ -67,9 +67,9 @@ describe('EmployeeTable', () => {
   it('asks to sort when a column header is clicked', () => {
     const props = renderTable();
 
-    fireEvent.click(screen.getByRole('button', { name: FIELD_LABELS.annual_salary }));
+    fireEvent.click(screen.getByRole('button', { name: FIELD_LABELS.annual_gross_salary }));
 
-    expect(props.onSort).toHaveBeenCalledWith(EMPLOYEE_SORT_FIELDS.ANNUAL_SALARY);
+    expect(props.onSort).toHaveBeenCalledWith(EMPLOYEE_SORT_FIELDS.ANNUAL_GROSS_SALARY);
   });
 
   it('reports one-based page numbers when moving to the next page', () => {

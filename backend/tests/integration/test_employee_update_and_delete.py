@@ -25,7 +25,7 @@ def test_update_employee_changes_fields_and_refreshes_updated_at(client: TestCli
         full_name="Asha Rao-Menon",
         country=Country.GERMANY.value,
         currency=Currency.EUR.value,
-        annual_salary="72000.00",
+        annual_gross_salary="72000.00",
     )
 
     response = client.put(f"{EMPLOYEES_URL}/{created['id']}", json=changes)
@@ -35,7 +35,7 @@ def test_update_employee_changes_fields_and_refreshes_updated_at(client: TestCli
     assert updated["full_name"] == "Asha Rao-Menon"
     assert updated["country"] == Country.GERMANY.value
     assert updated["currency"] == Currency.EUR.value
-    assert updated["annual_salary"] == "72000.00"
+    assert updated["annual_gross_salary"] == "72000.00"
     assert updated["created_at"] == created["created_at"]
     assert datetime.fromisoformat(updated["updated_at"]) > datetime.fromisoformat(
         created["updated_at"]
@@ -58,7 +58,7 @@ def test_update_employee_rejects_invalid_salary(client: TestClient) -> None:
     created = create_employee(client)
 
     response = client.put(
-        f"{EMPLOYEES_URL}/{created['id']}", json=build_employee_payload(annual_salary="0")
+        f"{EMPLOYEES_URL}/{created['id']}", json=build_employee_payload(annual_gross_salary="0")
     )
 
     assert response.status_code == status.HTTP_422_UNPROCESSABLE_CONTENT
