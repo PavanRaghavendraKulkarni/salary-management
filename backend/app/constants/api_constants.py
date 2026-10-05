@@ -14,6 +14,7 @@ INSIGHTS_PATH = "/insights"
 INSIGHTS_COUNTRIES_PATH = "/countries"
 INSIGHTS_JOB_TITLES_PATH = "/job-titles"
 INSIGHTS_DEPARTMENTS_PATH = "/departments"
+INSIGHTS_ORGANIZATION_PATH = "/organization"
 
 FRONTEND_ROUTE_PATH = "/{requested_path:path}"
 FRONTEND_INDEX_FILE = "index.html"
