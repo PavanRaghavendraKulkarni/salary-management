@@ -26,6 +26,6 @@ def test_http_exception_handler_treats_any_other_error_as_an_internal_error() ->
     response = asyncio.run(handle_http_exception(build_request(), ValueError("not HTTP")))
 
     assert response.status_code == status.HTTP_500_INTERNAL_SERVER_ERROR
-    assert json.loads(response.body) == {
+    assert json.loads(bytes(response.body)) == {
         "error": {"code": ErrorCode.INTERNAL_ERROR, "message": INTERNAL_ERROR_MESSAGE}
     }

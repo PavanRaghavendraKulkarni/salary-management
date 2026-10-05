@@ -1,3 +1,4 @@
+import logging
 from collections.abc import Sequence
 from typing import Any
 
@@ -8,6 +9,8 @@ from starlette.exceptions import HTTPException as StarletteHTTPException
 
 from app.constants.message_constants import (
     FIELD_ERROR_SEPARATOR,
+    INTERNAL_ERROR_MESSAGE,
+    UNEXPECTED_ERROR_LOG_MESSAGE,
     VALIDATION_ERROR_MESSAGE,
     ErrorCode,
 )
@@ -18,8 +21,11 @@ HTTP_STATUS_BY_ERROR_CODE: dict[ErrorCode, int] = {
     ErrorCode.NOT_FOUND: status.HTTP_404_NOT_FOUND,
     ErrorCode.DUPLICATE_EMAIL: status.HTTP_409_CONFLICT,
     ErrorCode.VALIDATION_ERROR: status.HTTP_422_UNPROCESSABLE_CONTENT,
+    ErrorCode.INTERNAL_ERROR: status.HTTP_500_INTERNAL_SERVER_ERROR,
 }
 REQUEST_LOCATION_PREFIXES = {"body", "query", "path"}
+
+logger = logging.getLogger(__name__)
 
 
 def build_error_response(
@@ -53,9 +59,10 @@ async def handle_request_validation_error(_: Request, error: Exception) -> JSONR
     )
 
 
-async def handle_http_exception(_: Request, error: Exception) -> JSONResponse:
+async def handle_http_exception(request: Request, error: Exception) -> JSONResponse:
     """Framework errors (unknown route, wrong method) use the same shape as domain errors."""
-    assert isinstance(error, StarletteHTTPException)
+    if not isinstance(error, StarletteHTTPException):
+        return await handle_unexpected_error(request, error)
     code = (
         ErrorCode.NOT_FOUND
         if error.status_code == status.HTTP_404_NOT_FOUND
@@ -64,7 +71,15 @@ async def handle_http_exception(_: Request, error: Exception) -> JSONResponse:
     return build_error_response(code, str(error.detail), error.status_code)
 
 
+async def handle_unexpected_error(request: Request, error: Exception) -> JSONResponse:
+    """Log the full traceback for us, but give the client a generic message so internals
+    such as SQL or file paths never leak into a response."""
+    logger.error(UNEXPECTED_ERROR_LOG_MESSAGE, request.method, request.url.path, exc_info=error)
+    return build_error_response(ErrorCode.INTERNAL_ERROR, INTERNAL_ERROR_MESSAGE)
+
+
 def register_exception_handlers(application: FastAPI) -> None:
     application.add_exception_handler(DomainError, handle_domain_error)
     application.add_exception_handler(RequestValidationError, handle_request_validation_error)
     application.add_exception_handler(StarletteHTTPException, handle_http_exception)
+    application.add_exception_handler(Exception, handle_unexpected_error)
