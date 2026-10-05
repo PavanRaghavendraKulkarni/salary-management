@@ -13,6 +13,7 @@ import {
 } from '../../constants/messageConstants';
 import { useInsights } from '../../controllers/useInsights';
 import type { CountryBreakdown } from '../../models/insight';
+import OrganizationSummary from '../components/OrganizationSummary';
 import SalaryChart from '../components/SalaryChart';
 import SalaryStatsTable, { type SalaryStatsRow } from '../components/SalaryStatsTable';
 
@@ -44,6 +45,7 @@ export default function InsightsPage() {
 
       {insights.error && <Alert severity="error">{insights.error}</Alert>}
       {insights.isLoadingCountries && <LinearProgress />}
+      {insights.organization && <OrganizationSummary organization={insights.organization} />}
 
       <div>
         <SalaryStatsTable

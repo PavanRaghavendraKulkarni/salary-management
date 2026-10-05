@@ -8,6 +8,7 @@ export const API_PATHS = {
   INSIGHTS_COUNTRIES: '/insights/countries',
   INSIGHTS_JOB_TITLES: '/insights/job-titles',
   INSIGHTS_DEPARTMENTS: '/insights/departments',
+  INSIGHTS_ORGANIZATION: '/insights/organization',
 } as const;
 
 export const API_ERROR_CODES = {

@@ -1,5 +1,5 @@
 import { API_PATHS } from '../constants/apiConstants';
-import type { CountryBreakdown, CountryInsight } from '../models/insight';
+import type { CountryBreakdown, CountryInsight, OrganizationInsight } from '../models/insight';
 import { apiClient } from './apiClient';
 
 async function getBreakdown(path: string, country: string): Promise<CountryBreakdown> {
@@ -19,5 +19,10 @@ export const insightService = {
 
   getDepartmentInsights(country: string): Promise<CountryBreakdown> {
     return getBreakdown(API_PATHS.INSIGHTS_DEPARTMENTS, country);
+  },
+
+  async getOrganizationInsight(): Promise<OrganizationInsight> {
+    const response = await apiClient.get<OrganizationInsight>(API_PATHS.INSIGHTS_ORGANIZATION);
+    return response.data;
   },
 };

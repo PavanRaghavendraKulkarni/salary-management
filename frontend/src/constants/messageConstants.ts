@@ -1,5 +1,6 @@
 /** Fixed locale so numbers and dates look the same for every user and in tests. */
 export const DISPLAY_LOCALE = 'en-US';
+export const DISPLAY_TIME_ZONE = 'UTC';
 
 export const APP_TITLE = 'ACME Salary Management';
 export const LOADING_LABEL = 'Loading';
@@ -84,7 +85,9 @@ export function deleteConfirmationMessage(fullName: string): string {
 
 export const INSIGHT_LABELS = {
   INTRO:
-    'Salaries are annual gross base pay in each country’s local currency, so figures are only compared within a country.',
+    'Salaries are annual gross base pay. Figures in each country’s local currency are exact; USD figures are approximate, for comparing across countries.',
+  ORGANIZATION_SUMMARY: 'Whole organisation (approx. USD)',
+  AVERAGE_USD: 'Average (≈ USD)',
   COUNTRY_SUMMARY: 'Pay by country',
   COUNTRY_SUMMARY_HINT: 'Select a country to see its breakdown.',
   COUNTRY_SELECT: 'Country',
@@ -104,4 +107,8 @@ export const INSIGHT_LABELS = {
 
 export function averageSalaryChartTitle(country: string, currency: string): string {
   return `Average salary by job title in ${country} (${currency})`;
+}
+
+export function approximateUsdNote(formattedRatesDate: string): string {
+  return `USD figures are approximate, converted at fixed exchange rates as of ${formattedRatesDate}.`;
 }

@@ -7,13 +7,16 @@ import TableHead from '@mui/material/TableHead';
 import TableRow from '@mui/material/TableRow';
 import Typography from '@mui/material/Typography';
 
-import { INSIGHT_LABELS } from '../../constants/messageConstants';
-import type { SalaryStatistics } from '../../models/insight';
+import { REPORTING_CURRENCY } from '../../constants/employeeConstants';
+import { approximateUsdNote, INSIGHT_LABELS } from '../../constants/messageConstants';
+import type { SalaryStatistics, UsdSalaryStatistics } from '../../models/insight';
 import { formatCurrency } from '../../utils/formatCurrency';
+import { formatIsoDate } from '../../utils/formatDate';
 
 export interface SalaryStatsRow extends SalaryStatistics {
   label: string;
   currency: string;
+  usd: UsdSalaryStatistics;
 }
 
 const STATISTIC_HEADERS = [
@@ -21,6 +24,7 @@ const STATISTIC_HEADERS = [
   INSIGHT_LABELS.MINIMUM,
   INSIGHT_LABELS.AVERAGE,
   INSIGHT_LABELS.MAXIMUM,
+  INSIGHT_LABELS.AVERAGE_USD,
 ];
 
 interface SalaryStatsTableProps {
@@ -80,6 +84,9 @@ export default function SalaryStatsTable({
                   {formatCurrency(row.average_salary, row.currency)}
                 </TableCell>
                 <TableCell align="right">{formatCurrency(row.max_salary, row.currency)}</TableCell>
+                <TableCell align="right">
+                  {formatCurrency(row.usd.average_salary, REPORTING_CURRENCY)}
+                </TableCell>
               </TableRow>
             ))}
             {rows.length === 0 && (
@@ -92,6 +99,11 @@ export default function SalaryStatsTable({
           </TableBody>
         </Table>
       </TableContainer>
+      {rows[0] && (
+        <Typography variant="caption" color="text.secondary" component="p" sx={{ px: 2, py: 1 }}>
+          {approximateUsdNote(formatIsoDate(rows[0].usd.rates_as_of))}
+        </Typography>
+      )}
     </Paper>
   );
 }

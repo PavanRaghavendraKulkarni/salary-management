@@ -1,11 +1,12 @@
 import { useCallback, useEffect, useState } from 'react';
 
-import type { CountryBreakdown, CountryInsight } from '../models/insight';
+import type { CountryBreakdown, CountryInsight, OrganizationInsight } from '../models/insight';
 import { toApiError } from '../services/apiClient';
 import { insightService } from '../services/insightService';
 
 export interface UseInsightsResult {
   countries: CountryInsight[];
+  organization: OrganizationInsight | null;
   selectedCountry: string;
   jobTitleBreakdown: CountryBreakdown | null;
   departmentBreakdown: CountryBreakdown | null;
@@ -15,9 +16,10 @@ export interface UseInsightsResult {
   selectCountry: (country: string) => void;
 }
 
-/** Loads the country summary once, then the breakdowns for whichever country is selected. */
+/** Loads the country and organisation summaries once, then the breakdowns for whichever country is selected. */
 export function useInsights(): UseInsightsResult {
   const [countries, setCountries] = useState<CountryInsight[]>([]);
+  const [organization, setOrganization] = useState<OrganizationInsight | null>(null);
   const [selectedCountry, setSelectedCountry] = useState('');
   const [jobTitleBreakdown, setJobTitleBreakdown] = useState<CountryBreakdown | null>(null);
   const [departmentBreakdown, setDepartmentBreakdown] = useState<CountryBreakdown | null>(null);
@@ -26,10 +28,10 @@ export function useInsights(): UseInsightsResult {
   const [error, setError] = useState<string | null>(null);
 
   useEffect(() => {
-    insightService
-      .getCountryInsights()
-      .then((summary) => {
+    Promise.all([insightService.getCountryInsights(), insightService.getOrganizationInsight()])
+      .then(([summary, organizationSummary]) => {
         setCountries(summary);
+        setOrganization(organizationSummary);
         setSelectedCountry((current) => current || (summary[0]?.country ?? ''));
       })
       .catch((caught: unknown) => setError(toApiError(caught).message))
@@ -64,6 +66,7 @@ export function useInsights(): UseInsightsResult {
 
   return {
     countries,
+    organization,
     selectedCountry,
     jobTitleBreakdown,
     departmentBreakdown,

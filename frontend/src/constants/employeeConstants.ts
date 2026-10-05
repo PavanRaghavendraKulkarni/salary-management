@@ -43,3 +43,6 @@ export const EMPLOYEE_TABLE_COLUMNS: readonly EmployeeTableColumn[] = [
   { field: EMPLOYEE_SORT_FIELDS.ANNUAL_GROSS_SALARY, align: 'right' },
   { field: EMPLOYEE_SORT_FIELDS.HIRE_DATE, align: 'left' },
 ];
+
+/** Insights convert every salary to this currency for cross-country comparison. */
+export const REPORTING_CURRENCY = 'USD';
