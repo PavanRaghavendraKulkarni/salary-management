@@ -5,7 +5,9 @@ A web app for ACME's HR team to manage salary records for 10,000 employees acros
 - **Employees:** search by name or email, filter by country, department and job title, sort any column, page through results, and add, edit or delete employees with validation.
 - **Insights:** headcount and minimum, average and maximum annual gross salary per country in local currency, with job title and department breakdowns and a chart for the selected country. Approximate USD figures, converted at fixed dated rates, allow comparison across countries and give an organisation-wide view.
 
-**Live app:** _add the Render URL here after the first deploy_
+- **Live app:** https://acme-salary-management-8yz1.onrender.com
+- **API docs:** https://acme-salary-management-8yz1.onrender.com/docs
+- **Demo video:** VIDEO_LINK_HERE
 
 > The app runs on Render's free tier, which sleeps when idle. The first request after a pause can take **30–60 seconds** while it wakes up and, if the database was reset, re-seeds 10,000 employees.
 

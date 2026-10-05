@@ -55,3 +55,7 @@ Each behaviour is committed as a failing `test:` commit followed immediately by 
 ## Unexpected errors logged twice
 
 Unexpected errors are logged twice in production, once by our 500 handler (with the request method and path) and once by uvicorn, because Starlette re-raises after the handler responds; this is accepted to keep the default server behaviour.
+
+## Desktop-first
+
+Desktop-first: the HR manager works at a desk. Tables scroll on small screens, but navigation and charts are not optimized for phones.
