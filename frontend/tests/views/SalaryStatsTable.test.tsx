@@ -15,6 +15,14 @@ describe('SalaryStatsTable', () => {
     expect(screen.getByText('3')).toBeInTheDocument();
   });
 
+  it('adds an approximate USD average column labelled with the exchange rate date', () => {
+    render(<SalaryStatsTable title="By country" groupLabel="Country" rows={ROWS} />);
+
+    expect(screen.getByRole('columnheader', { name: /average \(≈ USD\)/i })).toBeInTheDocument();
+    expect(screen.getByText('$12,053.33')).toBeInTheDocument();
+    expect(screen.getByText(/approximate.*as of October 2, 2026/i)).toBeInTheDocument();
+  });
+
   it('reports the clicked row and highlights the selected one', () => {
     const onSelect = vi.fn();
     render(

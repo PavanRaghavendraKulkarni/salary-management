@@ -4,13 +4,14 @@ import { afterEach, beforeEach, describe, expect, it, vi } from 'vitest';
 import { useInsights } from '../../src/controllers/useInsights';
 import { ApiError } from '../../src/services/apiClient';
 import { insightService } from '../../src/services/insightService';
-import { buildBreakdown, COUNTRY_INSIGHTS } from '../insightFixtures';
+import { buildBreakdown, COUNTRY_INSIGHTS, ORGANIZATION_INSIGHT } from '../insightFixtures';
 
 vi.mock('../../src/services/insightService', () => ({
   insightService: {
     getCountryInsights: vi.fn(),
     getJobTitleInsights: vi.fn(),
     getDepartmentInsights: vi.fn(),
+    getOrganizationInsight: vi.fn(),
   },
 }));
 
@@ -18,6 +19,7 @@ const service = vi.mocked(insightService);
 
 beforeEach(() => {
   service.getCountryInsights.mockResolvedValue(COUNTRY_INSIGHTS);
+  service.getOrganizationInsight.mockResolvedValue(ORGANIZATION_INSIGHT);
   service.getJobTitleInsights.mockImplementation(async (country) =>
     buildBreakdown(country, 'XXX', `${country} job title`),
   );
@@ -36,6 +38,12 @@ describe('useInsights', () => {
 
     await waitFor(() => expect(result.current.countries).toEqual(COUNTRY_INSIGHTS));
     expect(result.current.selectedCountry).toBe('Germany');
+  });
+
+  it('loads the organisation-wide USD summary', async () => {
+    const { result } = renderHook(() => useInsights());
+
+    await waitFor(() => expect(result.current.organization).toEqual(ORGANIZATION_INSIGHT));
   });
 
   it('loads job title and department breakdowns for the selected country', async () => {

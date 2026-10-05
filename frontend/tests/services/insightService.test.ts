@@ -3,7 +3,7 @@ import { afterEach, describe, expect, it, vi } from 'vitest';
 import { API_PATHS } from '../../src/constants/apiConstants';
 import { apiClient } from '../../src/services/apiClient';
 import { insightService } from '../../src/services/insightService';
-import { buildBreakdown, COUNTRY_INSIGHTS } from '../insightFixtures';
+import { buildBreakdown, COUNTRY_INSIGHTS, ORGANIZATION_INSIGHT } from '../insightFixtures';
 
 afterEach(() => {
   vi.restoreAllMocks();
@@ -30,5 +30,12 @@ describe('insightService', () => {
     expect(get).toHaveBeenCalledWith(API_PATHS.INSIGHTS_DEPARTMENTS, {
       params: { country: 'India' },
     });
+  });
+
+  it('fetches the organisation-wide USD summary', async () => {
+    const get = vi.spyOn(apiClient, 'get').mockResolvedValue({ data: ORGANIZATION_INSIGHT });
+
+    await expect(insightService.getOrganizationInsight()).resolves.toEqual(ORGANIZATION_INSIGHT);
+    expect(get).toHaveBeenCalledWith(API_PATHS.INSIGHTS_ORGANIZATION);
   });
 });

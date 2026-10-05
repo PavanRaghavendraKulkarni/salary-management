@@ -15,7 +15,10 @@ vi.mock('../src/services/employeeService', () => ({
 }));
 
 vi.mock('../src/services/insightService', () => ({
-  insightService: { getCountryInsights: vi.fn().mockResolvedValue([]) },
+  insightService: {
+    getCountryInsights: vi.fn().mockResolvedValue([]),
+    getOrganizationInsight: vi.fn().mockResolvedValue({ headcount: 0, usd: null }),
+  },
 }));
 
 function renderAt(path: string) {
