@@ -8,6 +8,15 @@ from app.constants.employee_constants import Country, Currency, Department, JobT
 from app.models.employee_model import Employee
 from app.views.employee_view import EmployeeCreate, EmployeeUpdate
 
+# Round USD rates for tests, so converted figures can be worked out by hand and do not
+# change when the real rates in constants are updated.
+TEST_USD_RATES: dict[Currency, Decimal] = {
+    **{currency: Decimal("1") for currency in Currency},
+    Currency.INR: Decimal("0.01"),
+    Currency.EUR: Decimal("1.5"),
+}
+TEST_RATES_AS_OF = date(2026, 1, 1)
+
 DEFAULT_EMPLOYEE_FIELDS: dict[str, Any] = {
     "full_name": "Asha Rao",
     "email": "asha.rao@acme.com",
@@ -71,6 +80,8 @@ def build_insight_dataset() -> list[dict[str, Any]]:
     India: 1,000,000 and 1,500,000 (Software Engineer, Engineering) and 700,000 (Sales
     Representative, Sales); average 1,066,666.666... which must round to 1,066,666.67.
     Germany: 60,000.00 (Software Engineer, Engineering) and 50,000.20 (Accountant, Finance).
+    With TEST_USD_RATES (INR 0.01, EUR 1.5) these are 10,000, 15,000 and 7,000 USD for India
+    and 90,000 and 75,000.30 USD for Germany.
     """
     india = {"country": Country.INDIA.value, "currency": Currency.INR.value}
     germany = {"country": Country.GERMANY.value, "currency": Currency.EUR.value}
