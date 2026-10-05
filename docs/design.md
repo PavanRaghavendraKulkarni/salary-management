@@ -59,7 +59,7 @@ flowchart TD
 | `department` | varchar | allowed list |
 | `country` | varchar | allowed list |
 | `currency` | char(3) | ISO 4217, must equal the country's currency |
-| `annual_salary` | numeric(12, 2) | > 0 |
+| `annual_gross_salary` | numeric(12, 2) | > 0 |
 | `hire_date` | date | not in the future |
 | `created_at`, `updated_at` | datetime | set automatically |
 

@@ -32,7 +32,7 @@ Spreadsheets at this size are slow, error-prone (duplicate rows, wrong currency 
 
 ## Assumptions
 
-1. Salary means **annual base pay** only (no bonus or equity).
+1. **Confirmed:** salary means the **annual gross base salary** of a full-time employee, stored as `annual_gross_salary`. Bonus, deductions and equity are out of scope.
 2. Each country has exactly one currency, and insights are reported **per country in local currency**. No cross-currency totals are shown, because they would need exchange rates.
 3. Allowed countries (9), departments (9) and job titles (12) are a fixed list in backend constants; changing them is a code change.
 4. Emails are unique and compared case-insensitively (stored lowercase).

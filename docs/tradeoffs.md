@@ -36,8 +36,12 @@ Countries, currencies, departments and job titles are enums in backend constants
 
 ## Tables created at start-up, no migration tool
 
-The schema is one table, so `create_all` at seed time is enough. Once the schema starts changing in production, Alembic migrations should replace it.
+The schema is one table, so `create_all` at seed time is enough. Once the schema starts changing in production, Alembic migrations should replace it. Renaming `annual_salary` to `annual_gross_salary` showed the cost: `create_all` does not alter an existing table, so a local database has to be deleted and re-seeded. That was acceptable here because the data is seeded and the free-tier database is recreated on every deploy.
 
 ## Hard delete
 
 Deleting an employee removes the row. Audit history is out of scope; `created_at` and `updated_at` cover basic tracking. A soft delete or an audit log would be the next step if HR needs to recover records.
+
+## Red test commits in the history
+
+Each behaviour is committed as a failing `test:` commit followed immediately by the commit that makes it pass, so the history shows the tests were written first. The cost is that the red commit alone does not pass its tests, which matters for `git bisect` or a checkout of that exact commit. To contain this, every other commit must pass all tests, a red commit is always followed directly by its green commit, and the two are always pushed together.
