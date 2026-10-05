@@ -7,7 +7,7 @@ A web app for ACME's HR team to manage salary records for 10,000 employees acros
 
 - **Live app:** https://acme-salary-management-8yz1.onrender.com
 - **API docs:** https://acme-salary-management-8yz1.onrender.com/docs
-- **Demo video:** VIDEO_LINK_HERE
+- **Demo video:** https://www.loom.com/share/4145dad047644a058fdb4111f331bb3a
 
 > The app runs on Render's free tier, which sleeps when idle. The first request after a pause can take **30–60 seconds** while it wakes up and, if the database was reset, re-seeds 10,000 employees.
 
