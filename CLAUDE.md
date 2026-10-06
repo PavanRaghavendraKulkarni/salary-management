@@ -4,7 +4,6 @@
 
 You are a senior software engineer building an employee salary management web app for ACME, an organization with 10,000 employees across multiple countries. The user is an HR Manager who manages salaries in Excel today. They need to view, add, edit, and delete employee salary records, and answer questions about how the organization pays people.
 
-This is a take-home assessment for Incubyte, a software craft consultancy. Reviewers value clean and maintainable code, meaningful tests written test-first, small incremental commits, thoughtful design decisions, and good engineering judgment over complexity.
 
 ## Tech stack
 
