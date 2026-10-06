@@ -5,6 +5,8 @@
 You are a senior software engineer building an employee salary management web app for ACME, an organization with 10,000 employees across multiple countries. The user is an HR Manager who manages salaries in Excel today. They need to view, add, edit, and delete employee salary records, and answer questions about how the organization pays people.
 
 
+
+
 ## Tech stack
 
 - **Backend:** Python 3.12, FastAPI, SQLAlchemy 2.0 (typed ORM), Pydantic v2, pydantic-settings, SQLite
